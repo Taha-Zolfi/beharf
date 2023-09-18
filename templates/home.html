@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بحرف</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+</head>
+<body>
+    
+    <style>
+        .navbar {
+            justify-content: space-between;
+            padding: 1rem;
+        }
+    .navleft img {
+    width: 10vh;
+
+}
+    </style>
+
+    <div class="fpage">
+        <div class="navbar">
+            <div class="navleft">
+                <img src="{% static 'nopf.png' %}" style="border-radius: 50%;">
+                <p style="direction: rtl;">سلام {{user.username}}</p>
+            </div>
+            <a  href="https://eloquent-ramanujan-aplcwxfu9.iran.liara.run/">ارتباط با برنامه نویس</a></div>
+        <div class="content">
+            <div class="logo"><img src="{% static 'beharf.png' %}"></div>
+            <div class="explain"><p>با غریبه های سرتاسر ایران حرف بزن</p></div>
+            <div class="choose">
+
+                <a href="/text" ><button class="button">متنی</button></a>
+                <a href="/video"><button class="button">ویدیویی</button></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+    <!-- <div class="back{% if authenticated %} authenticated{% endif %}" {% if authenticated %}style="display: none;"{% endif %}>
+        <div class="popup">
+            <h1>مشخصاتتو بگو</h1>
+            <form action="{% url 'home' %}" method="post" class="pop">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="اسمتو بگو">
+                <input type="password" name="password" placeholder="رمزتو بگو">
+                <button type="submit">ورود به برنامه</button>
+                {% if message %}
+                <p>{{ message }}</p>
+            {% endif %}
+            </form>
+        </div>
+    </div> -->

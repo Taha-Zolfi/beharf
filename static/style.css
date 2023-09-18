@@ -1,0 +1,142 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+*{
+    font-family: kalameh;
+}
+.fpage {
+    background-color: aliceblue;
+    height: 100vh;
+
+}
+.navbar{
+    display: flex;
+    justify-content:space-between;
+
+
+}
+.navbar a {
+    text-decoration: none;
+    font-size: 3vh;
+    color: #6b9598;
+
+}
+.navbar a:hover{
+    color: #0b666a;
+    transition-duration: 330ms;
+}
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo img{
+    width: 80vh;
+}
+.explain {
+    color: #0b666a;
+    font-size: 5vh;
+    font-weight: 500;
+}
+.choose {
+
+}
+.choose .button{
+    background: linear-gradient(33deg, #0B666A 0%, #35A29F 100%);
+    border: none;
+    color: white;
+    padding: 6px 24px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 5vh;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 3vh;
+    margin-left: 3vh;
+    transition-duration: 0.2s;
+    transition-timing-function: linear;
+}
+.choose .button:hover{
+    transform: scale(1.1);
+    box-shadow: 0 0 35px #0b656a5b ;
+
+}
+.back{
+    width: 100vw;height: 100vh;position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;background-color: #0b656a96;backdrop-filter:10px;
+}
+.popup{ width: 30vw;
+     height: 60vh;
+      border: solid 2px #0b656a;
+      box-shadow: 0 0 55px #0b656a;
+      border-radius: 10px;
+       display: flex;
+
+          flex-direction: column;
+           position: fixed;
+            top: 50%;
+             left: 50%;
+              transform: translate(-50%, -50%);
+               z-index: 9999;
+                background-color: white;
+            }
+.popup h1{
+    font-size: 8vh;
+    text-align: center;
+}
+
+form.pop {
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: end;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input[type=text], input[type=number] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-bottom: 2px solid #333;
+}
+
+input[type=text]:focus, input[type=number]:focus {
+    outline: none;
+    border-bottom-color: #35A29F;
+}
+
+button[type=submit] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #35A29F;
+    color: #fff;
+    font-weight: bold;
+}
+
+button[type=submit]:hover {
+    background-color: #0B666A;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+
+}
+input {
+    border: none;
+    border-bottom: solid 2px #0B666A;
+    outline: none;
+}
+
+.navleft img {
+    width: 10vh;
+}

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+
+</head>
+<body>
+    <script>
+        const signup = () => {
+            document.getElementById('signin').style.display = 'none';
+            document.getElementById('signup').style.display = 'block';
+        }
+        const signin = () => {
+            document.getElementById('signup').style.display = 'none';
+            document.getElementById('signin').style.display = 'block';
+        }
+    </script>
+
+    <style>
+        * {
+            font-family: kalameh;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background : linear-gradient(#35A29F,#0B666A);
+            background-repeat: no-repeat;
+            background-size:auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .sign {
+            background-color: white;
+            width: 30vw;
+            height: 80vh;
+            display: flex;
+            /* justify-content: center; */
+            align-items: center;
+            flex-direction: column;
+            border-radius: 30px;
+            box-shadow: 0 0 55px #0b656a;
+        }
+        h1 {
+            color: #071952;
+           
+            font-weight: 900;
+            font-size: 15vh;
+            margin-top: -5vh;
+        }
+        input {
+            outline: none;
+            border: solid 2px #218585;
+            border-radius: 4px;
+            width: 28vw;
+            height: 8vh;
+            margin: 1rem;
+            direction: rtl;
+            font-size: 4vh;
+            text-align: center;
+
+        }
+        input[type=submit] {
+
+            background: linear-gradient(33deg, #0B666A 0%, #35A29F 100%);
+    border: none;
+    color: white;
+    padding: 6px 24px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 5vh;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 3vh;
+    margin-left: 3vh;
+    transition-duration: 0.2s;
+    transition-timing-function: linear;
+        }
+    </style>
+
+
+    <div class="sign" id="signin">
+    <h1>ورود</h1>
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <input type="text" name="username" id="username" placeholder="یوزرنیم"><br>
+        <input type="password" name="password" id="password" placeholder="پسورد"><br>
+        <input type="submit" value="وارد شو">
+    </form>
+    <a class="toggle-button" onclick="signup()">اکانت نداری ؟ یکی بساز</a>
+
+</div>
+
+
+
+    <div class="sign" id="signup" style="display: none;">
+    <h1>ثبت نام</h1>
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <input type="hidden" name="signup" value="1">
+        <input type="text" name="username" id="new_username" placeholder="یوزرنیم">
+        <br>
+        <input type="text" name="name" id="new_name" placeholder="اسم">
+        <br>
+        <input type="text" name="city" id="new_city" placeholder="شهر">
+        <br>
+        <input type="number" name="age" id="new_age" placeholder="سن">
+        <br>
+        <input type="password" name="password" id="new_password" placeholder="پسورد">
+        <br>
+        <input type="submit" value="Signup">
+    </form>
+    <button class="toggle-button" onclick="signin()">اکانت داری ؟ ورود کن</button>
+</div>
+
+
+</body>
+</html>
