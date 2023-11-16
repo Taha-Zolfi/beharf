@@ -89,15 +89,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'myproject.wsgi.application'
+
 ASGI_APPLICATION = 'myproject.asgi.application'
-# ASGI_APPLICATION = 'myproject.routing.application'
 
-
-
-# django_heroku.settings(locals())
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 AUTH_USER_MODEL = 'myapp.customuser'
 
 DATABASES = {
@@ -127,8 +121,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -139,8 +131,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR , 'static'),)
@@ -149,4 +139,3 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR , 'static'),)
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-SECURE_CROSS_ORIGIN_OPENER_POLICY = None

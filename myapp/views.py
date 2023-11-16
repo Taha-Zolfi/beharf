@@ -20,7 +20,15 @@ def login(request):
             name = request.POST['name']
             age = request.POST['age']
             city = request.POST['city']
-            
+
+            if len(username) < 4 or not username.isascii():
+                messages.info(request, 'یوزرنیم باید حداقل 4 کاراکتر و فقط به زبان انگلیسی باشد')
+                return render(request, 'login.html')
+
+            if len(password) < 8 or not password.isascii():
+                messages.info(request, 'پسورد باید حداقل 8 کاراکتر و فقط به زبان انگلیسی باشد')
+                return render(request, 'login.html')
+
             if customuser.objects.filter(username=username).exists():
                 messages.info(request, 'این یوزرنیم قبلا استفاده شده')
             else :
@@ -34,12 +42,21 @@ def login(request):
         else:
             username = request.POST['username']
             password = request.POST['password']
+
+            if len(username) < 4 or not username.isascii():
+                messages.info(request, 'یوزرنیم باید حداقل 4 کاراکتر و فقط به زبان انگلیسی باشد')
+                return render(request, 'login.html')
+
+            if len(password) < 8 or not password.isascii():
+                messages.info(request, 'پسورد باید حداقل 8 کاراکتر و فقط به زبان انگلیسی باشد')
+                return render(request, 'login.html')
+
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 auth_login(request, user)
                 return redirect('home')
             else:
-                return render(request, 'login.html', {'error': 'Invalid username or password'})
+                return render(request, 'login.html', )
     else:
         return render(request, 'login.html')
 

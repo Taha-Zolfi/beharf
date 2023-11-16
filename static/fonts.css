@@ -1,0 +1,38 @@
+@font-face {
+    font-family: kalameh;
+    font-weight: 900;
+    src: url('KalamehWeb-Black.woff') format('woff');
+  }
+  
+  @font-face {
+    font-family: kalameh;font-weight: 800;
+    src: url("KalamehWeb-ExtraBold.woff") format('woff');
+  }
+  @font-face {
+    font-family: kalameh;font-weight: 700;
+    src: url("KalamehWeb-Bold.woff") format('woff');
+  }
+  @font-face {
+    font-family: kalameh;font-weight: 600;
+    src: url("KalamehWeb-SemiBold.woff'") format('woff');
+  }
+  @font-face {
+    font-family: kalameh;font-weight: 500;
+    src: url("KalamehWeb-Medium.woff") format('woff');
+  }
+  @font-face {
+    font-family: kalameh;font-weight: 400;
+    src: url("KalamehWeb-Regular.woff") format('woff');
+  }
+  @font-face {
+    font-family: kalameh;font-weight: 300;
+    src: url("KalamehWeb-Light.woff'") format('woff');
+  }
+  @font-face {
+    font-family: kalameh;font-weight: 200;
+    src: url("KalamehWeb-ExtraLight.woff") format('woff');
+  }
+  @font-face {
+    font-family: kalameh;font-weight: 100;
+    src: url("KalamehWeb-Thin.ttf") format('woff');
+  }

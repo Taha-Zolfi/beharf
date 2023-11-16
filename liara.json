@@ -3,10 +3,9 @@
         {
         "name" : "sqlite",
         "mountTo" : "data"
-        },
-        {
-            "name": "app",
-            "mountTo" : "myapp"
         }
-    ]
+    ],
+    "django": {
+        "pythonVersion": "3.11"
+      }
 }

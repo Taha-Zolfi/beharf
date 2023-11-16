@@ -1,3 +1,4 @@
+  {% load static %}
 <!doctype html>
 
 <html lang="en"> 
@@ -5,12 +6,14 @@
  <head> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8"> 
-
+  <link rel="stylesheet" type="text/css" href="{% static 'fonts.css' %}">
   <title>ورود | ثبت نام
   </title> 
 
     </script>
   <STYle>
+
+
     *
     {
       margin: 0;
@@ -64,11 +67,11 @@
       flex-direction: column;
       /* gap: 40px; */
     }
-    .content h2 
+    .content img 
     {
-      font-size: 5em;
-      color: #00fff7;
-      text-transform: uppercase;
+      width: 10rem;
+      filter: drop-shadow(0 0 15px #00fff72d);
+
     }
     .form 
     {
@@ -147,6 +150,7 @@
       .signin {height: fit-content;width: 80vw;}
 
     }
+    
     </STYle>
 
  </head> 
@@ -168,16 +172,16 @@ const signin = () => {
 
    <div class="signin"  id="login"> 
     <div class="content"> 
-     <h2>ورود</h2> 
+     <img src="{% static 'signin.png' %}">
      <form method="post" action="{% url 'login' %}" class="form"> 
         {% csrf_token %}
       <div class="inputBox"> 
-       <input type="text" name="username" required> <i>یوزرنیم</i> 
+       <input type="text" name="username" required> <i>نام کاربری</i> 
       </div> 
       <div class="inputBox"> 
-       <input type="password" name="password" required> <i>پسورد</i> 
+       <input type="password" name="password" required> <i>رمز عبور</i> 
       </div> 
-      <div class="links"> <a href="#">رمزتو یادت رفته ؟</a> <a style="cursor: pointer;" onclick="signup()">ثبت نام</a>
+      <div class="links"> <a onclick="document.getElementById('e').innerHTML = 'خب به یادش بیار XD'" id="e" href="#">رمزتو یادت رفته ؟</a> <a style="cursor: pointer;" onclick="signup()">ثبت نام</a>
 
       </div> 
       <div class="inputBox"> 
@@ -190,12 +194,12 @@ const signin = () => {
 
    <div class="signin" id="signup" style="display: none;"> 
     <div class="content"> 
-     <h2>ثبتنام</h2> 
+      <img src="{% static 'signup.png' %}">
      <form method="post" action="{% url 'login' %}" class="form"> 
         {% csrf_token %}
         <input type="hidden" name="signup" value="1">
       <div class="inputBox"> 
-       <input type="text" name="username" required> <i>یوزرنیم</i> 
+       <input type="text" name="username" required> <i>نام کاربری</i> 
       </div> 
       <div class="inputBox"> 
         <input type="text" name="name" required> <i>اسم</i> 
@@ -207,13 +211,13 @@ const signin = () => {
         <input type="number" name="age" required> <i>سن</i> 
        </div>
       <div class="inputBox"> 
-       <input type="password" name="password" required> <i>پسورد</i> 
+       <input type="password" name="password" required> <i>رمز عبور</i> 
       </div> 
       <div class="links"> <a style="cursor: pointer;" onclick="signin()"></a> <a style="cursor: pointer;" onclick="signin()">ورود</a>
 
       </div> 
       <div class="inputBox"> 
-       <input type="submit" value="ورود"> 
+       <input type="submit" value="ثبت نام"> 
       </div> 
     </form> 
     </div> 
