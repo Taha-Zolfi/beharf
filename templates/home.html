@@ -11,13 +11,97 @@
 <body>
     
     <style>
-        .navbar {
-            justify-content: space-between;
-            padding: 1rem;
-        }
-    .navleft img {
-    width: 10vh;
 
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #232323;
+}
+*{
+    font-family: kalameh;
+}
+.fpage {
+
+    height: 100vh;
+
+  background: radial-gradient(at bottom right, #05373a, #232323,#232323) bottom right,
+              radial-gradient(at top left, #05373a, #232323 ,#232323) top left;
+  background-size: 50% 50%;
+  background-repeat: no-repeat;
+
+}
+
+.navbar{
+    display: flex;
+    justify-content:space-between;
+    padding: 1rem;
+
+}
+.navbar a {
+    text-decoration: none;
+    font-size: 3vh;
+    color: #ffffff;
+
+}
+.navbar a:hover{
+    color: #0b666a;
+    transition-duration: 330ms;
+}
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo img{
+    width: 80vh;
+    filter: drop-shadow(0 0 50px #ffffff57);
+}
+.explain {
+    color: #00a8af;
+    text-shadow: 0 0 25px #00a9afa1;
+    font-size: 6vh;
+    font-weight: 500;
+}
+.choose {
+
+}
+.choose .button{
+    background: linear-gradient(33deg, #0B666A 0%, #35A29F 100%);
+    border: none;
+    color: white;
+    padding: 6px 24px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 5vh;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 3vh;
+    margin-left: 3vh;
+    transition-duration: 0.2s;
+    transition-timing-function: linear;
+}
+.choose .button:hover{
+    transform: scale(1.1);
+    box-shadow: 0 0 35px #0b656a5b ;
+
+}
+
+.navleft img {
+    width: 10vh;
+}
+.navleft p {
+    color: white;
+}
+@media (orientation : portrait) {
+    .logo img {
+        width: 75vw;
+    }
+    .explain {font-size: 5vw;}
+    .choose .button{ font-size: 3vh;}
+    .content{margin-top: 15vh;}
 }
     </style>
 
@@ -25,33 +109,18 @@
         <div class="navbar">
             <div class="navleft">
                 <img src="{% static 'nopf.png' %}" style="border-radius: 50%;">
-                <p style="direction: rtl;">سلام {{user.username}}</p>
+                <p style="direction: rtl;">سلام {{ user.name }}</p>
             </div>
             <a  href="https://eloquent-ramanujan-aplcwxfu9.iran.liara.run/">ارتباط با برنامه نویس</a></div>
         <div class="content">
-            <div class="logo"><img src="{% static 'beharf.png' %}"></div>
+            <div class="logo"><img src="{% static 'beharf white.png' %}"></div>
             <div class="explain"><p>با غریبه های سرتاسر ایران حرف بزن</p></div>
             <div class="choose">
 
-                <a href="/text" ><button class="button">متنی</button></a>
+                <a onclick="alert('هنوز آماده نیست گل🥰')" ><button class="button">متنی</button></a>
                 <a href="/video"><button class="button">ویدیویی</button></a>
             </div>
         </div>
     </div>
 </body>
 </html>
-
-    <!-- <div class="back{% if authenticated %} authenticated{% endif %}" {% if authenticated %}style="display: none;"{% endif %}>
-        <div class="popup">
-            <h1>مشخصاتتو بگو</h1>
-            <form action="{% url 'home' %}" method="post" class="pop">
-                {% csrf_token %}
-                <input type="text" name="username" placeholder="اسمتو بگو">
-                <input type="password" name="password" placeholder="رمزتو بگو">
-                <button type="submit">ورود به برنامه</button>
-                {% if message %}
-                <p>{{ message }}</p>
-            {% endif %}
-            </form>
-        </div>
-    </div> -->

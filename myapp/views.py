@@ -57,5 +57,5 @@ def video(request):
 
 @login_required(login_url='login/')
 def text(request):
-
+    
     return render(request, 'text.html')

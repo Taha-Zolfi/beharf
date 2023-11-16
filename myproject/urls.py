@@ -1,4 +1,6 @@
-from myapp.views import home, video, text, login, logout
+# project_directory/urls.py
+
+from myapp.views import home, video, text, login
 from django.contrib import admin
 from django.urls import path
 
@@ -8,5 +10,4 @@ urlpatterns = [
     path('video/', video, name='video'),
     path('text/', text, name='text'),
     path('login/', login, name='login'),
-    path('logout/', logout, name='logout'),
 ]

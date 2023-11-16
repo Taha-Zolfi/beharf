@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
-
+# import django_heroku
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -38,9 +38,24 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
 ]
 
-AUTH_USER_MODEL = 'myapp.customuser'
+
+
+CHANNELS_LAYER = "default"
+
+CHANNELS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+CHANNEL_LAYERS = {
+    CHANNELS_LAYER: CHANNELS[CHANNELS_LAYER],
+}
+
+
+
 
 
 MIDDLEWARE = [
@@ -51,8 +66,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'myproject.middleware.ActiveUserMiddleware',
 ]
+
+
+# CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'myproject.urls'
 
@@ -74,18 +91,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 ASGI_APPLICATION = 'myproject.asgi.application'
+# ASGI_APPLICATION = 'myproject.routing.application'
 
 
+
+# django_heroku.settings(locals())
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+AUTH_USER_MODEL = 'myapp.customuser'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'data', 'db.sqlite3'),
     }
-}
 
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -128,3 +149,4 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR , 'static'),)
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None

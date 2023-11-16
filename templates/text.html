@@ -1,11 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
 </head>
 <body>
+  <style>video {width:100px;height: auto;}</style>
+      <h1>wassup ma ni</h1>
+      <input type="text" id="messageInput1" style="background-color: aquamarine;">
+      <input type="submit" id="sendMessage1" onclick="sendMessage()">
+
+      <video id="localVideo" autoplay playsinline></video>
+      <video id="remoteVideo" autoplay playsinline></video>
+
+
+
+
+      <script>
+let localConnection;
+let remoteConnection;
+let localStream;
+let is_girl = false;
+let is_boy = false;
+
+var socket = new WebSocket('ws://' + window.location.host + '/ws/video/');
+
+async function boy() {
+    localConnection = new RTCPeerConnection();
+
+    localConnection.onicecandidate = e => {
+        if (localConnection.iceGatheringState === 'complete') {
+            console.log("NEW ice candidate!!");
+            console.log(JSON.stringify(localConnection.localDescription));
+            socket.send(JSON.stringify({user: '{{ user.username }}', offer: localConnection.localDescription}));
+        }
+    };
+
+    let sendChannel = localConnection.createDataChannel("sendChannel");
+    sendChannel.onmessage = e => document.body.appendChild(document.createElement('p')).textContent = e.data;
+    sendChannel.onopen = e => console.log("open!");
+    sendChannel.onclose = e => console.log("closed!");
+
+    let stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    document.getElementById('localVideo').srcObject = stream;
+
+    localStream = stream;
+    localStream.getTracks().forEach(track => {
+        localConnection.addTrack(track, localStream);
+    });
+
+    let offer = await localConnection.createOffer();
+    await localConnection.setLocalDescription(offer);
+
+    localConnection.ontrack = event => {
+        console.log('ontrack event fired in boy function');
+        if (event.streams[0]) {
+            console.log('Stream is defined in ontrack event');
+            document.getElementById('remoteVideo').srcObject = event.streams[0];
+        } else {
+            console.log('Stream is not defined in ontrack event');
+        }
+    };
+}
+
+
+async function girl(offer) {
+    remoteConnection = new RTCPeerConnection();
+
+    remoteConnection.ontrack = event => {
+        if (event.streams[0]) {
+            document.getElementById('remoteVideo').srcObject = event.streams[0];
+        }
+    };
+
+    await remoteConnection.setRemoteDescription(new RTCSessionDescription(offer));
+
+    let stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    document.getElementById('localVideo').srcObject = stream;
+
+    stream.getTracks().forEach(track => {
+        remoteConnection.addTrack(track, stream);
+    });
+
+    let answer = await remoteConnection.createAnswer();
+    await remoteConnection.setLocalDescription(answer);
+
+    socket.send(JSON.stringify({ user: '{{user.username}}', answer: remoteConnection.localDescription }));
+}
+
+let offerPromise = new Promise(resolve => {
+  socket.onmessage = function(event) {
+    var data = JSON.parse(event.data);
+    if (data.offer) {
+      resolve(data.offer);
+    }
+  };
+});
+
+socket.onmessage = function(event) {
+  var data = JSON.parse(event.data);
+
+  if(data.waiting_users){
+    if(data.waiting_users[0] === '{{user.username}}'){
+      boy();
+      is_boy = true;
+    }
+
+    if(data.waiting_users[1] === '{{user.username}}'){
+      is_girl = true;
+    }
+  }
+  if (data.offer) {
+    if(is_girl){girl(data.offer);}
+    console.log('hello');
+  }
+  if (data.answer) {
+    if(is_boy){
+      localConnection.setRemoteDescription(new RTCSessionDescription(data.answer))
+      console.log('bye bye bye');
+    }
     
+  }
+
+  
+}
+
+
+socket.onclose = (event) => {
+  console.log('WebSocket connection closed with code ' + event.code);
+};
+
+
+      </script>
 </body>
 </html>

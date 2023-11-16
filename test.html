@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+    <button onclick="m()">click me</button>
+    <!-- <button onclick="b()">click np</button> -->
+    <script>
+        var socket = new WebSocket('ws://' + window.location.host + '/ws/video/');
+        socket.onopen = () => {console.log('hi');}
+        
+        // function b () {socket.close()}
+        function m(){
+        var socket = new WebSocket('ws://' + window.location.host + '/ws/video/');
+        socket.onopen = () => {console.log('hi2');}
+        }
+    </script>
+</body>
+</html>

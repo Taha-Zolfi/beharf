@@ -1,12 +1,384 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+    <title>Video Chat</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"> 
 </head>
 <body>
+<style>
+.header img {
+    width: 15vw;
+    padding: 0;
+    margin: 0;
+}
+*{
+    font-family: kalameh;
+}
+body{
+    background: linear-gradient(213deg, rgba(11, 102, 106, 1) 0%, rgb(48, 48, 48) 50%);
+    /* height: 100vh; */
+    background-size: cover;
+    background-attachment: fixed;
+}
+.skip {
+    background: linear-gradient(33deg, #0B666A 0%, #35A29F 100%);
+    border: none;
+    color: white;
+    padding: 6px 24px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 5vh;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 3vh;
+    margin-left: 3vh;
+    transition-duration: 0.2s;
+    transition-timing-function: linear;
+}
+.submit {
+    background-color:#0B666A;
+    border: none;
+    color: white;
+    padding: 6px 24px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 5vh;
+    border-top-left-radius: 13px;
+    border-bottom-left-radius: 13px;
+    cursor: pointer;
 
-  </ul>
+    transition-duration: 0.2s;
+    transition-timing-function: linear;
+}
+.bottom {
+    display: flex;
+    flex-direction: row;
+    width: 90vw;
+}
+.text{
+    width: 70vw;
+    border-top-right-radius: 13px;
+    border-bottom-right-radius: 13px;
+    outline: none;
+    border-color:#0B666A;
+    text-align: end;
+    font-size: 5vh;
+}
+
+.chat {
+    display: flex;
+    flex-direction:row-reverse
+}
+.videos {
+    display: flex;
+    justify-content: center;
+}
+video {width:40vw;height: 40vh;border-radius: 30px; box-shadow: 0 0 15px #35A29F; background-color: white;margin: 40px;}
+
+
+
+.down {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#you {
+    text-align: end;
+    direction: ltr;
+    color: #0B666A;
+    padding-right: 2rem;
+}
+
+#me {
+    text-align: start;
+    direction: ltr;
+    color: #35A29F;
+}
+
+.messages {
+    height: 20vh;
+    width: 85vw;
+    background-color: aliceblue;
+    border-radius: 10px;
+    box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+ul {
+    list-style: none;
+    font-weight: 600;
+
+
+}
+
+
+</style>
+
+    <div class="header">
+        <a href="/">
+        <img src="{% static 'beharf white.png' %}" alt="بحرف">
+    </a>
+    </div>
+    <div class="videos">
+        <video id="localVideo" autoplay playsinline></video>
+        <video id="remoteVideo" autoplay playsinline src="{% static 'loading.mp4' %}" loop></video>
+    </div>
+
+
+    <div class="down">
+     <div class="messages">
+        <ul id="ulll">
+
+        </ul>
+
+     </div>
+    <div class="bottom">
+    <div class="skip" onclick="skip()">بعدی</div>
+    <div class="chat">
+        <input type="text" class="text" id="text">
+        <input type="submit" class="submit"  value="ارسال" onclick="send_message()">
+    </div>
+</div>
+</div>
+
+<script> 
+let sendChannel;
+let localConnection;
+let remoteConnection;
+let localStream;
+let is_girl = false;
+let is_boy = false;
+
+// var socket = new WebSocket('wss://' + window.location.host + '/ws/video/');
+var socket = new WebSocket('wss://' + window.location.host);
+var ulll = document.querySelector("#ulll")
+function reconect() {
+    socket = new WebSocket('wss://' + window.location.host + '/ws/video/');
+    socket.onopen = () => {console.log('سوکت بعدی رو باز میکنه بازی کن');}
+    
+socket.onmessage = function(event) {
+  var data = JSON.parse(event.data);
+
+if(data.waiting_users){
+if(data.waiting_users[0] === '{{user.username}}'){
+boy();
+is_boy = true;
+}
+
+if(data.waiting_users[1] === '{{user.username}}'){
+is_girl = true;
+}
+}
+if (data.offer) {
+if(is_girl){girl(data.offer);}
+console.log('hello');
+}
+if (data.answer) {
+if(is_boy){
+localConnection.setRemoteDescription(new RTCSessionDescription(data.answer))
+console.log('bye bye bye');
+}
+}
+}
+}
+async function boy() {
+localConnection = new RTCPeerConnection();
+
+localConnection.onicecandidate = e => {
+if (localConnection.iceGatheringState === 'complete') {
+console.log("NEW ice candidate!!");
+console.log(JSON.stringify(localConnection.localDescription));
+socket.send(JSON.stringify({user: '{{ user.username }}', offer: localConnection.localDescription}));
+}
+};
+
+sendChannel = localConnection.createDataChannel("sendChannel");
+sendChannel.onmessage = e => {
+let li = document.createElement('li');
+li.id = 'you';
+li.textContent = e.data;
+
+if (e.data === 'skip'){
+localConnection.close();
+sendChannel.close();
+ulll.innerHTML = '';
+reconect()
+}
+else{
+ulll.appendChild(li);
+}
+}
+
+sendChannel.onopen = e => {sendChannel.send('به {{ user.name }} {{user.age}} ساله از {{ user.city }} متصل شدید باهم دوست باشید :)');socket.send(JSON.stringify({ d: 'hola' }));socket.close()}
+sendChannel.onclose = e => {console.log("closed!");document.getElementById('remoteVideo').src = "{% static 'loading.mp4' %}";}
+
+let stream = await navigator.mediaDevices.getUserMedia({ video: true });
+document.getElementById('localVideo').srcObject = stream;
+
+localStream = stream;
+localStream.getTracks().forEach(track => {
+localConnection.addTrack(track, localStream);
+});
+
+let offer = await localConnection.createOffer();
+await localConnection.setLocalDescription(offer);
+
+localConnection.ontrack = event => {
+console.log('ontrack event fired in boy function');
+if (event.streams[0]) {
+console.log('Stream is defined in ontrack event');
+document.getElementById('remoteVideo').srcObject = event.streams[0];
+} else {
+console.log('Stream is not defined in ontrack event');
+}
+};
+}
+
+
+async function girl(offer) {
+remoteConnection = new RTCPeerConnection();
+
+remoteConnection.ontrack = event => {
+if (event.streams[0]) {
+document.getElementById('remoteVideo').srcObject = event.streams[0];
+}
+};
+
+await remoteConnection.setRemoteDescription(new RTCSessionDescription(offer));
+remoteConnection.ondatachannel= e => {
+
+const receiveChannel = e.channel;
+receiveChannel.onmessage =e =>  {
+    let li = document.createElement('li');
+li.id = 'you';
+li.textContent = e.data;
+
+if (e.data === 'skip'){
+remoteConnection.close();
+receiveChannel.close();
+ulll.innerHTML = '';
+reconect()
+}
+else {
+
+ulll.appendChild(li);
+}
+}
+receiveChannel.onopen = e =>  {remoteConnection.channel.send('به {{ user.name }} {{user.age}} ساله از {{ user.city }} متصل شدید باهم دوست باشید :)'); socket.close()}
+
+receiveChannel.onclose =e => {console.log("closed!!!!!!"); document.getElementById('remoteVideo').src = "{% static 'loading.mp4' %}";}
+remoteConnection.channel = receiveChannel;
+
+}
+let stream = await navigator.mediaDevices.getUserMedia({ video: true });
+document.getElementById('localVideo').srcObject = stream;
+
+stream.getTracks().forEach(track => {
+remoteConnection.addTrack(track, stream);
+});
+
+let answer = await remoteConnection.createAnswer();
+await remoteConnection.setLocalDescription(answer);
+
+socket.send(JSON.stringify({ user: '{{user.username}}', answer: remoteConnection.localDescription }));
+}
+
+function girl_message(message){
+
+var li = document.createElement("li");
+
+
+li.id = "me";
+
+
+li.textContent = message;
+
+var ul = document.querySelector("#ulll");
+remoteConnection.channel.send(message)
+
+ul.appendChild(li);
+}
+function boy_message(message){
+var li = document.createElement("li");
+li.id = "me";
+li.textContent = message;
+
+var ul = document.querySelector("#ulll");
+sendChannel.send(message)
+
+ul.appendChild(li);
+
+}
+
+let offerPromise = new Promise(resolve => {
+  socket.onmessage = function(event) {
+    var data = JSON.parse(event.data);
+    if (data.offer) {
+      resolve(data.offer);
+    }
+  };
+});
+socket.onopen= () => {console.log('یه سوکت باز شد');}
+socket.onmessage = function(event) {
+  var data = JSON.parse(event.data);
+
+if(data.waiting_users){
+if(data.waiting_users[0] === '{{user.username}}'){
+boy();
+is_boy = true;
+}
+
+if(data.waiting_users[1] === '{{user.username}}'){
+is_girl = true;
+}
+}
+if (data.offer) {
+if(is_girl){girl(data.offer);}
+console.log('hello');
+}
+if (data.answer) {
+if(is_boy){
+localConnection.setRemoteDescription(new RTCSessionDescription(data.answer))
+console.log('bye bye bye');
+}
+}
+}
+socket.onclose = (event) => {
+console.log('WebSocket connection closed with code ' + event.code);
+};
+socket2.onclose = (event) => {
+console.log('WebSocket connection closed with code ' + event.code);
+};
+function send_message(){
+let message = document.getElementById('text').value
+console.log(message)
+if (is_boy){
+boy_message(message)
+}
+else if (is_girl){
+girl_message(message)
+}
+}
+function skip(){
+    ulll.innerHTML = '';
+if (is_boy){
+sendChannel.send('skip')
+localConnection.close();
+sendChannel.close();
+}
+else if (is_girl){
+remoteConnection.channel.send('skip')
+remoteConnection.close();
+receiveChannel.close();
+}
+reconect()
+}
+</script>
 </body>
 </html>
