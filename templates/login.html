@@ -6,20 +6,23 @@
  <head> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8"> 
-  <link rel="stylesheet" type="text/css" href="{% static 'fonts.css' %}">
+  <link rel="icon" href="{% static 'signup.png' %}" >
   <title>ورود | ثبت نام
   </title> 
 
     </script>
   <STYle>
-
+@font-face {
+    font-family: Dana;
+    src: url("{% static 'DanaFaNum-Regular.woff2' %}") format("woff2");
+  }
 
     *
     {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: kalameh;
+      font-family: Dana;
     }
     body 
     {
@@ -27,7 +30,7 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      background: #0b666a;
+      background: #3688ff;
     }
     section 
     {
@@ -46,16 +49,16 @@
     .signin
     {
       position: absolute;
-      width: 70vw;
+      width: 35vw;
       background: #222;  
       z-index: 1000;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 40px;
-      padding-top: 20px;
-      border-radius: 30px;
-      box-shadow: 0 0 55px #00f7ff69;
+      margin-top: 2rem;
+      border-radius: 50px;
+      box-shadow: 0 0 15px #001c1d69;
     }
     .content 
     {
@@ -69,12 +72,14 @@
     }
     .content img 
     {
-      width: 10rem;
-      filter: drop-shadow(0 0 15px #00fff72d);
+      margin-top: -220px;
+      width: 25rem;
+      
 
     }
     .form 
     {
+      margin-top: -4rem;
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -87,24 +92,26 @@
     }
     .inputBox input 
     {
+      
       position: relative;
       width: 100%;
-      background: #333;
+      background: transparent;
       border: none;
       outline: none;
       padding: 25px 10px 7.5px;
-      border-radius: 4px;
       color: #fff;
-      font-weight: 500;
+      /* font-weight: 500; */
       font-size: 1em;
+      border-bottom: 1px solid #36c9ff;
+      text-align : end;
     }
     .inputBox i 
     {
       position: absolute;
-      left: 0;
+      right: 0;
       padding: 15px 10px;
       font-style: normal;
-      color: #aaa;
+      color: #2b7c9b;
       transition: 0.5s;
       pointer-events: none;
     }
@@ -113,7 +120,7 @@
     {
       transform: translateY(-7.5px);
       font-size: 0.8em;
-      color: #fff;
+      color: #36c9ff;
     }
     .links 
     {
@@ -124,33 +131,81 @@
     }
     .links a 
     {
-      color: #fff;
+      color: #cc0000;
       text-decoration: none;
+      text-shadow: 0 0 15px #ff6262d0;
     }
     .links a:nth-child(2)
     {
-      color: rgb(0, 140, 255);
-      font-weight: 600;
+      color: #008cff;
+      /* font-weight: 600; */
+      text-shadow: 0 0 25px #35a4ffd5;;
+    }
+    a {
+      color: #0060ff;
+      display: flex;
+      align-self: center;
+      flex-direction: row-reverse;
+    }
+    a p {
+      color :#2b7c9b;
+      padding-left: 5px;
     }
     .inputBox input[type="submit"]
     {
       padding: 10px;
-      background: rgb(0, 140, 255);
+      background: #008cff;
       color: #000;
-      font-weight: 600;
+      /* font-weight: 600; */
       font-size: 1.35em;
       letter-spacing: 0.05em;
       cursor: pointer;
+      text-align: center;
+      border-radius: 50px;
+      border: none;
+      transition-duration: 220ms;
     }
     input[type="submit"]:active
     {
       opacity: 0.6;
+
+    }
+    .inputBox input[type="submit"]:hover {
+
+      box-shadow: 0 0 15px #008cff41;
+    }
+    .inputBox input[type="submit"]:not(:hover) {
+        box-shadow: 0 0 0;
+}
+
+    #nca {
+      flex-direction: row;
+    }
+    #nca input {
+      width: 30%;
+      margin-left: 0.5rem;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-slider-runnable-track {
+      -webkit-appearance: none;
+      margin: 0;
+  }
+    #nca i {
+      display: none;
     }
     @media (orientation : portrait) {
       .signin {height: fit-content;width: 80vw;}
-
+      .content img {
+        width: 18rem;
+        margin-top: -190px;
+      }
+      #nca input {
+      /* width: 20%; */
+      margin-left: 0.2rem;
     }
-    
+    }
+
     </STYle>
 
  </head> 
@@ -181,12 +236,18 @@ const signin = () => {
       <div class="inputBox"> 
        <input type="password" name="password" required> <i>رمز عبور</i> 
       </div> 
-      <div class="links"> <a onclick="document.getElementById('e').innerHTML = 'خب به یادش بیار XD'" id="e" href="#">رمزتو یادت رفته ؟</a> <a style="cursor: pointer;" onclick="signup()">ثبت نام</a>
-
-      </div> 
+      <!-- <div class="links">
+        <a id='error'>{% if messages %}
+            {% for message in messages %}
+              {{ message }}
+            {% endfor %}
+        {% endif %}</a>
+         
+      </div>  -->
       <div class="inputBox"> 
        <input type="submit" value="ورود"> 
-      </div> 
+      </div>
+       <a style="cursor: pointer;text-align:center;" onclick="signup()"><p> حساب نداری ؟</p>ثبت نام</a>
     </form> 
     </div> 
    </div> 
@@ -194,31 +255,36 @@ const signin = () => {
 
    <div class="signin" id="signup" style="display: none;"> 
     <div class="content"> 
-      <img src="{% static 'signup.png' %}">
+      <img src="{% static 'signin.png' %}">
      <form method="post" action="{% url 'login' %}" class="form"> 
         {% csrf_token %}
         <input type="hidden" name="signup" value="1">
       <div class="inputBox"> 
        <input type="text" name="username" required> <i>نام کاربری</i> 
       </div> 
-      <div class="inputBox"> 
-        <input type="text" name="name" required> <i>اسم</i> 
-       </div> 
-       <div class="inputBox"> 
-        <input type="text" name="city" required> <i>شهر</i> 
-       </div>
-       <div class="inputBox"> 
-        <input type="number" name="age" required> <i>سن</i> 
+      <div class="inputBox" id="nca"> 
+        <input type="text" name="name" required placeholder="اسم">
+
+        <input type="text" name="city" required placeholder="شهر">
+
+        <input type="number" name="age" required placeholder="سن" min="1" max="100">
        </div>
       <div class="inputBox"> 
        <input type="password" name="password" required> <i>رمز عبور</i> 
       </div> 
-      <div class="links"> <a style="cursor: pointer;" onclick="signin()"></a> <a style="cursor: pointer;" onclick="signin()">ورود</a>
+      <!-- <div class="links">         
+        <a id='error'>{% if messages %}
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+    {% endif %}</a>
+    <a style="cursor: pointer;" onclick="signin()">ورود</a>
 
-      </div> 
+      </div>  -->
       <div class="inputBox"> 
        <input type="submit" value="ثبت نام"> 
-      </div> 
+      </div>
+      <a style="cursor: pointer;text-align:center;" onclick="signin()"><p> حساب داری ؟</p>ورود</a> 
     </form> 
     </div> 
    </div> 
@@ -227,38 +293,3 @@ const signin = () => {
 
  </body>
 </html>
-
-   <!-- <div class="sign" id="signin">
-    <h1>ورود</h1>
-    <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        <input type="text" name="username" id="username" placeholder="یوزرنیم"><br>
-        <input type="password" name="password" id="password" placeholder="پسورد"><br>
-        <input type="submit" value="وارد شو">
-    </form>
-    <a class="toggle-button" onclick="signup()">اکانت نداری ؟ یکی بساز</a>
-
-</div>
-
-
-
-    <div class="sign" id="signup" style="display: none;">
-    <h1>ثبت نام</h1>
-    <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        <input type="hidden" name="signup" value="1">
-        <input type="text" name="username" id="new_username" placeholder="یوزرنیم">
-        <br>
-        <input type="text" name="name" id="new_name" placeholder="اسم">
-        <br>
-        <input type="text" name="city" id="new_city" placeholder="شهر">
-        <br>
-        <input type="number" name="age" id="new_age" placeholder="سن">
-        <br>
-        <input type="password" name="password" id="new_password" placeholder="پسورد">
-        <br>
-        <input type="submit" value="Signup">
-    </form>
-    <button class="toggle-button" onclick="signin()">اکانت داری ؟ ورود کن</button>
-</div> -->
-

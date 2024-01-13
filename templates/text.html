@@ -1,137 +1,514 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Document</title>
+    <title>متنی بحرف !</title>
+
+    <script src="{% static 'peerjs.min.js' %}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"> 
+    <link rel="icon" href="{% static 'dewdew.png' %}" >
 </head>
 <body>
-  <style>video {width:100px;height: auto;}</style>
-      <h1>wassup ma ni</h1>
-      <input type="text" id="messageInput1" style="background-color: aquamarine;">
-      <input type="submit" id="sendMessage1" onclick="sendMessage()">
+<style>
+@font-face {
+    font-family: Dana;
+    src: url("{% static 'DanaFaNum-Regular.woff2' %}") format("woff2");
+  }
 
-      <video id="localVideo" autoplay playsinline></video>
-      <video id="remoteVideo" autoplay playsinline></video>
-
-
-
-
-      <script>
-let localConnection;
-let remoteConnection;
-let localStream;
-let is_girl = false;
-let is_boy = false;
-
-var socket = new WebSocket('ws://' + window.location.host + '/ws/video/');
-
-async function boy() {
-    localConnection = new RTCPeerConnection();
-
-    localConnection.onicecandidate = e => {
-        if (localConnection.iceGatheringState === 'complete') {
-            console.log("NEW ice candidate!!");
-            console.log(JSON.stringify(localConnection.localDescription));
-            socket.send(JSON.stringify({user: '{{ user.username }}', offer: localConnection.localDescription}));
-        }
-    };
-
-    let sendChannel = localConnection.createDataChannel("sendChannel");
-    sendChannel.onmessage = e => document.body.appendChild(document.createElement('p')).textContent = e.data;
-    sendChannel.onopen = e => console.log("open!");
-    sendChannel.onclose = e => console.log("closed!");
-
-    let stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    document.getElementById('localVideo').srcObject = stream;
-
-    localStream = stream;
-    localStream.getTracks().forEach(track => {
-        localConnection.addTrack(track, localStream);
-    });
-
-    let offer = await localConnection.createOffer();
-    await localConnection.setLocalDescription(offer);
-
-    localConnection.ontrack = event => {
-        console.log('ontrack event fired in boy function');
-        if (event.streams[0]) {
-            console.log('Stream is defined in ontrack event');
-            document.getElementById('remoteVideo').srcObject = event.streams[0];
-        } else {
-            console.log('Stream is not defined in ontrack event');
-        }
-    };
+.header img {
+    width: 15vw;
+    padding: 0;
+    margin: 0;
+}
+*{
+    font-family: Dana;
+}
+body{
+    background: linear-gradient(213deg, rgba(11, 102, 106, 1) 0%, rgb(48, 48, 48) 50%);
+    background-size: cover;
+    background-attachment: fixed;
+}
+.skip {
+    background: linear-gradient(33deg, #225668 0%, #27516d 100%);
+    border: none;
+    color: white;
+    padding: 10px 25px 10px 25px;
+    font-size: 5vh;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-right: 1.7rem;
+    transition-duration: 0.2s;
+    transition-timing-function: linear;
 }
 
 
-async function girl(offer) {
-    remoteConnection = new RTCPeerConnection();
-
-    remoteConnection.ontrack = event => {
-        if (event.streams[0]) {
-            document.getElementById('remoteVideo').srcObject = event.streams[0];
-        }
-    };
-
-    await remoteConnection.setRemoteDescription(new RTCSessionDescription(offer));
-
-    let stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    document.getElementById('localVideo').srcObject = stream;
-
-    stream.getTracks().forEach(track => {
-        remoteConnection.addTrack(track, stream);
-    });
-
-    let answer = await remoteConnection.createAnswer();
-    await remoteConnection.setLocalDescription(answer);
-
-    socket.send(JSON.stringify({ user: '{{user.username}}', answer: remoteConnection.localDescription }));
+.bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 90vw;
 }
-
-let offerPromise = new Promise(resolve => {
-  socket.onmessage = function(event) {
-    var data = JSON.parse(event.data);
-    if (data.offer) {
-      resolve(data.offer);
-    }
-  };
-});
-
-socket.onmessage = function(event) {
-  var data = JSON.parse(event.data);
-
-  if(data.waiting_users){
-    if(data.waiting_users[0] === '{{user.username}}'){
-      boy();
-      is_boy = true;
-    }
-
-    if(data.waiting_users[1] === '{{user.username}}'){
-      is_girl = true;
-    }
-  }
-  if (data.offer) {
-    if(is_girl){girl(data.offer);}
-    console.log('hello');
-  }
-  if (data.answer) {
-    if(is_boy){
-      localConnection.setRemoteDescription(new RTCSessionDescription(data.answer))
-      console.log('bye bye bye');
-    }
+.text{
+    width: 70vw;
+    border-top-right-radius: 13px;
+    border-bottom-right-radius: 13px;
+    outline: none;
+    border-style: solid;
+    border-color:#0B666A;
+    text-align: end;
+    font-size: 5vh;
     
+    
+}
+
+
+
+.down {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+#you {
+    align-self: flex-end; 
+    justify-self: flex-end;
+    display: flex;
+}
+
+#me {
+    align-self: flex-start; 
+    justify-self: flex-start;
+    text-align: center;
+    display: flex;
+    background-color: #35a29e8a;
+}
+
+
+
+
+.messages {
+    height: 70vh;
+    width: 80vw;
+    background-color: #f0f8ff;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    overflow: auto;
+    width: 90vw;
+    overflow-x:hidden;
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+p {
+  background-color: #0088ff2c;
+  border-radius: 8px;
+  width: fit-content;
+  padding: 0.5rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  font-weight: 600;
+  max-width: 60vw;
+  display: flex;
+
+}
+
+
+.messages::-webkit-scrollbar{
+    background: transparent;
+    width: 0.7rem;
+    border-radius: 10px;
+ }
+
+ .messages::-webkit-scrollbar-thumb{
+    background:linear-gradient(#35A29F,#0d7774);
+    border-radius: 10px;
+ }
+ .skip:disabled {background: linear-gradient(33deg, #4d4d4d 0%, #8f8f8f 100%);transition-duration: 330ms;}
+
+
+@keyframes popIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+p.new-message {
+    animation: popIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+#ulll {
+padding: 1rem;
+display: flex;
+flex-direction: column;
+
+}
+#ulll img{
+  border-radius: inherit;
+}
+
+
+.chat2 {
+  background-color: aliceblue;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  width: 80vw;
+  justify-content: space-between;
+}
+
+.chat2 .text2 {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  text-align: end;
+  width: 63vw;
+  font-size: 3vw;
+}
+
+.chat2 img {
+  /* margin-right: 20px; */
+  width: 40px;
+}
+#sendpic{
+  width: 25px;
+  padding-left: 1rem;
+}
+.imagess{
+display: flex;
+align-items: center;
+}
+.imagess img{
+  opacity: 0.6;
+  cursor: pointer;
+  transition-duration: 100ms;
+}
+.imagess img:hover{
+  opacity: 1;
+}
+
+@media (orientation : portrait) {
+
+.header img {width: 15vh;}
+
+.bottom {flex-direction: column-reverse;}
+.text {
+    width: 58vw;
+    font-size: 2vh;
+    height: 6vh;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.chat2 .text2 {
+
+    font-size: 4vw;
+    font-weight: 600;
+
+
+}
+.skip {
+    margin-top: 1rem;
+    padding: 3px 80px 3px 80px;
+    margin-right: 0;
+}
+
+.chat2 img {
+  /* margin-right: 20px; */
+  width: 30px;
+}
+#sendpic{
+  width: 20px;
+  padding-left: 1rem;
+}
+}
+
+
+</style>
+
+    <div class="header" id="header">
+        <a href="/">
+        <img src="{% static 'beharf white.png' %}" alt="بحرف">
+    </a>
+    </div>
+
+
+    <div class="down">
+     <div class="messages">
+        <div id="ulll">
+            <p id="loading">درحال پیدا کردن کاربر ...</p>
+        </div>
+     </div>
+
+    <div class="bottom">
+    <button class="skip" id="skip" onclick="closeConnection()">بعدی</button>
+
+    <div class="chat2">
+      <div class="imagess">
+      <img src="{% static 'send.png' %}" class="sobmit">
+      <input type="file" id="image-input" style="display: none;" accept="image/*">
+      <img onclick="document.getElementById('image-input').click();" id="sendpic" src="{% static 'pic.png' %}">
+      </div>
+      <input type="text" class="text2" id="text">
+    </div>
+    </div>
+
+</div>
+{% if user.is_authenticated and user.is_staff %}
+<script>
+  function sendhello(){
+    conn.send('به {{ user.name }} {{user.age}} ساله از {{ user.city }} متصل شدید (صاحب بحرف) ');
   }
+</script>
+{% else %}
+<script>
+  function sendhello(){
+    conn.send('به {{ user.name }} {{user.age}} ساله از {{ user.city }} متصل شدید باهم دوست باشید :)');
+  }
+</script>
+{% endif %}
+
+
+<script>
+    let conn;  // Declare 'conn' in a broader scope
+    let peer;
+    var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
+
+    
+    function closeConnection() {    
+  
+    if (conn) {
+        conn.close();
+    }
+
+    }
+
+    const config = {
+      iceServers: [
+        { urls: 'stun:167.172.161.251:3478' },
+        { urls: 'turn:167.172.161.251:3478', username: 'gorb', credential: 'pass' }
+      ]
+    };
+function resetPeer() {
+  console.log('reseting nigga');
+  if (conn) {
+    conn.close();
+    conn = null;
+  }
+  if (peer) {
+    peer.disconnect();
+    peer.destroy();
+    peer = null;
+  }
+  document.getElementById('ulll').innerHTML = '<p id="loading">درحال پیدا کردن کاربر ...</p>'
+  // Re-initialize Peer object with a new ID
+  socket = new WebSocket(ws_scheme + window.location.host + '/testt/');
+  peer = new Peer({config: config});
+  socket.onopen = () => {
+    console.log('سوکت باز کردوم یخیخیخیخخییخی');
+};
+ 
+  peer.on('open', (id) => {
+    console.log(`My new peer ID is: ${id}`);
+    if (socket.readyState == 1) {
+      socket.send(JSON.stringify({ peer: { username: '{{user.username}}', peer_id: id } }));
+    }
+  });
+
+
+
+socket.onmessage = async function (event) {
+        var data = JSON.parse(event.data);
+        console.log(data);
+        if (data.users.length === 2) {
+          for (let i = 0; i < data.users.length; i++) {
+            const obj = data.users[i];
+            if (obj.username !== '{{user.username}}') {
+              console.log('maniga');
+              conn = peer.connect(obj.peer_id);
+              // Close the socket connection
+              socket.close();
+              // Break out of the loop
+              break;
+            }
+          }
+}
+
+        conn.on('data', (data) => {
+          console.log('Received:', data);
+          if (data.endCall) {
+          console.log("The other side hung up the call.");
+        }
+        });
+        conn.on('open', () => {
+            document.getElementById('loading').style.display = 'none'
+            
+            sendhello()
+          
+        });
+
+        conn.on('close', () => {
+        console.log('Outgoing connection closed');
+        console.log('nigga closed');
+        resetPeer();
+      });
 
   
-}
+    };
+
+    peer.on('connection', (incomingConn) => {
+      incomingConn.on('data', (data) => {
+    if (typeof data === 'object' && data.type === 'image') {
+      const img = document.createElement('img');
+      img.src = data.data;
+      img.style.maxWidth = '200px';  // Adjust as needed
+      img.style.maxHeight = '200px'; // Adjust as needed
+      img.style.borderRadius = 'inherit';
+      const li = document.createElement('p');
+      li.id = 'you'; // Use 'you' to indicate receiver
+      li.appendChild(img);
+      li.classList.add('new-message');
+      document.getElementById('ulll').appendChild(li);
+      } else {
+  console.log('Received:', data);
+  
+  // Decode the received emoji string
+  const decodedEmoji = decodeURIComponent(data);
+
+  let li = document.createElement('p');
+  li.id = 'you';
+  li.textContent = decodedEmoji;  // Use the decoded emoji string
+  li.classList.add("new-message");
+  ulll.appendChild(li);
+      }
+  });
+      });
 
 
-socket.onclose = (event) => {
-  console.log('WebSocket connection closed with code ' + event.code);
+document.getElementById('image-input').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(readerEvent) {
+      const imageDataUrl = readerEvent.target.result;
+      // Display the image immediately for the sender
+      const img = document.createElement('img');
+      img.src = imageDataUrl;
+      img.style.maxWidth = '200px';  // Adjust as needed
+      img.style.maxHeight = '200px'; // Adjust as needed
+      const li = document.createElement('p');
+      li.id = 'me'; // Use 'me' to indicate sender
+      li.appendChild(img);
+      li.classList.add('new-message');
+      document.getElementById('ulll').appendChild(li);
+
+      // Send the image data URL over PeerJS
+      if (conn) {
+        conn.send({
+          type: 'image',
+          data: imageDataUrl
+        });
+        console.log('Image sent');
+      } else {
+        console.log('Not connected to any peer.');
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+
+const messageInput = document.querySelector('#text');
+messageInput.addEventListener('keydown', function(event) {
+  // Check if the pressed key is Enter (keycode 13)
+  if (event.keyCode === 13) {
+    // Prevent the default behavior of the Enter key (e.g., adding a new line)
+    event.preventDefault();
+
+    // Extract the message from the input field
+    const customMessage = messageInput.value.trim();
+
+    // Check if the message is not empty
+    if (customMessage !== '') {
+      if (conn) {
+        console.log(`Sent: ${customMessage}`);
+
+        // Convert emoji to its string representation
+        const messageWithEmojis = Array.from(customMessage).map(char => {
+          if (char.length > 1) {
+            // It's an emoji, convert to string
+            return encodeURIComponent(char);
+          }
+          return char;
+        }).join('');
+
+        // Create a new message element and append it to the chat UI
+        let li = document.createElement("p");
+        li.id = "me";
+        li.textContent = customMessage;
+        li.classList.add("new-message");
+        document.getElementById('ulll').appendChild(li);
+
+        // Send the message
+        conn.send(messageWithEmojis);
+
+        // Clear the input field
+        messageInput.value = '';
+      } else {
+        console.log('Not connected to any peer.');
+      }
+    } else {
+      console.log('Please enter a message.');
+    }
+  }
+});
+document.querySelector('.sobmit').onclick = function() {
+    let messageInput = document.querySelector('#text');
+    const customMessage = messageInput.value.trim();
+
+    if (customMessage !== '') {
+        if (conn) {
+            console.log(`Sent: ${customMessage}`);
+
+            const messageWithEmojis = Array.from(customMessage).map(char => {
+                if (char.length > 1) {
+                    return encodeURIComponent(char);
+                }
+                return char;
+            }).join('');
+
+            let li = document.createElement("p");
+            li.id = "me";
+            li.textContent = customMessage;
+            li.classList.add("new-message");
+            document.getElementById('ulll').appendChild(li);
+
+            conn.send(messageWithEmojis);
+
+            messageInput.value = '';
+        } else {
+            console.log('Not connected to any peer.');
+        }
+    } else {
+        console.log('Please enter a message.');
+    }
 };
 
 
-      </script>
+}
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      resetPeer()
+  });
+
+
+  
+  </script>
+  
 </body>
 </html>

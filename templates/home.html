@@ -5,13 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بحرف</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'fonts.css' %}">
-    
+    <meta name="description" content="چت با غریبه، چت با غریبه ایرانی، بحرف، چت ویدیویی با غریبه، چت متنی با غریبه، چت ناشناس">
+    <meta name="keywords" content="چت، چت آنلاین، چت با غریبه، چت ایرانی، بحرف، چت ویدیویی، چت متنی، چت ناشناس">
+    <link rel="icon" href="{% static 'dewdew.png' %}" >
 </head>
 <body>
     
     <style>
+
+@font-face {
+    font-family: Dana;
+    src: url("{% static 'DanaFaNum-Regular.woff2' %}") format("woff2");
+  }
 
 body{
     margin: 0;
@@ -19,7 +24,7 @@ body{
     background-color: #232323;
 }
 *{
-    font-family: kalameh;
+    font-family: Dana;
 }
 .fpage {
 
@@ -63,7 +68,7 @@ body{
     color: #00a8af;
     text-shadow: 0 0 25px #00a9afa1;
     font-size: 6vh;
-    font-weight: 500;
+    /* font-weight: 500; */
 }
 .choose {
 
@@ -84,8 +89,8 @@ body{
     transition-duration: 0.2s;
     transition-timing-function: linear;
 }
-.choose .button:hover{
-    transform: scale(1.1);
+.choose a .button:hover{
+    
     box-shadow: 0 0 35px #0b656a5b ;
 
 }
@@ -105,26 +110,113 @@ body{
     .content{margin-top: 15vh;}
 }
 
+@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
+        @keyframes pulsate {
+            0% {
+                filter: drop-shadow(0 0 50px #ffffff57);
 
+            }
+            50% {
+                filter: drop-shadow(0 0 50px #ffffff7a);
+            }
+            100% {
+                filter: drop-shadow(0 0 50px #ffffff57);
+
+            }
+        }
+        .fpage {
+
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        .navbar, .content {
+            opacity: 0;
+            animation: fadeInUp 1s ease-in-out 0.5s forwards;
+        }
+
+        .logo img {
+            opacity: 0;
+            animation: fadeInUp 1s ease-in-out 1s forwards, pulsate 3s infinite 2s;
+        }
+
+        .explain {
+            opacity: 0;
+            animation: fadeInUp 1s ease-in-out 1.5s forwards;
+        }
+
+        .choose .button:nth-child(1) {
+            opacity: 0;
+            animation: fadeInUp 1s ease-in-out 2s forwards;
+        }
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        a img {
+    transition: transform 0.5s ease; /* Add a smooth transition for a better visual effect */
+}
+
+/* Define the animation on hover */
+a img:hover {
+    transform: rotate(360deg) scale(1.1);
+    filter: drop-shadow(0 0 15px #00a9af4d);
+    
+}
     </style>
+
+
+
 
     <div class="fpage">
         <div class="navbar">
             <div class="navleft">
-                <img src="{% static 'nopf.png' %}" style="border-radius: 50%;">
+                <a href="/profile"><img src="{% static 'nopf.png' %}" style="border-radius: 50%;"></a>
                 <p style="direction: rtl;">سلام {{ user.name }}</p>
             </div>
             <a  href="https://eloquent-ramanujan-aplcwxfu9.iran.liara.run/">ارتباط با برنامه نویس</a></div>
         <div class="content">
             <div class="logo"><img src="{% static 'beharf white.png' %}"></div>
-            <div class="explain"><p>با غریبه های سرتاسر ایران حرف بزن</p></div>
+            <div class="explain" id="explainText"><p></p></div>
             <div class="choose">
 
-                <a onclick="alert('هنوز آماده نیست گل🥰')" ><button class="button">متنی</button></a>
+                <a href="/text"><button class="button">متنی</button></a>
                 <a href="/video"><button class="button">ویدیویی</button></a>
             </div>
         </div>
     </div>
+    
+    <script>
+        const typedText = "با غریبه های سرتاسر ایران حرف بزن";
+        const explainText = document.getElementById("explainText").querySelector("p");
+    
+        function typeWriter() {
+            let i = 0;
+            setTimeout(() => {
+                const typingInterval = setInterval(() => {
+                    if (i < typedText.length) {
+                        explainText.textContent += typedText.charAt(i);
+                        i++;
+                    } else {
+                        clearInterval(typingInterval);
+                    }
+                }, 100);
+            }, 2000);
+        }
+    
+        // Trigger the typing animation
+        window.onload = function () {
+            typeWriter();
+        };
+    </script>
+
 </body>
 </html>

@@ -25,10 +25,8 @@ SECRET_KEY = 'django-insecure-gvu+#0gj4##@6ltz9fkfjq+(a#v9awp+p8yaf45xss+&)i!1k(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
-
-# Application definition
 
 INSTALLED_APPS = [
     'myapp',
@@ -43,19 +41,14 @@ INSTALLED_APPS = [
 
 
 
-CHANNELS_LAYER = "default"
-
-CHANNELS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
 CHANNEL_LAYERS = {
-    CHANNELS_LAYER: CHANNELS[CHANNELS_LAYER],
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": ["redis://:foobared@167.172.161.251:6379/1"],
+        },
+    },
 }
-
-
-
 
 
 MIDDLEWARE = [
@@ -66,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 

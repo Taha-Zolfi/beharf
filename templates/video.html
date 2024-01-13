@@ -2,21 +2,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Video Chat</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>ویدیویی بحرف !</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8"> 
-    <link rel="stylesheet" type="text/css" href="{% static 'fonts.css' %}">
+    <script src="{% static 'peerjs.min.js' %}"></script>
+    <link rel="icon" href="{% static 'dewdew.png' %}" >
 </head>
 <body>
 <style>
+  @font-face {
+    font-family: Dana;
+    src: url("{% static 'DanaFaNum-Regular.woff2' %}") format("woff2");
+  }
 .header img {
     width: 15vw;
     padding: 0;
     margin: 0;
 }
 *{
-    font-family: kalameh;
+  font-family: Dana;
 }
 body{
     background: linear-gradient(213deg, rgba(11, 102, 106, 1) 0%, rgb(48, 48, 48) 50%);
@@ -25,18 +30,14 @@ body{
     background-attachment: fixed;
 }
 .skip {
-    background: linear-gradient(33deg, #0B666A 0%, #35A29F 100%);
+    background: linear-gradient(33deg, #225668 0%, #27516d 100%);
     border: none;
     color: white;
-    padding: 6px 24px 12px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
+    padding: 10px 25px 10px 25px;
     font-size: 5vh;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    margin-right: 1rem;
-    /* margin-left: 3vh; */
+    margin-right: 1.7rem;
     transition-duration: 0.2s;
     transition-timing-function: linear;
 }
@@ -65,27 +66,15 @@ body{
     flex-direction: row;
     width: 90vw;
 }
-.text{
-    width: 70vw;
-    border-top-right-radius: 13px;
-    border-bottom-right-radius: 13px;
-    outline: none;
-    border-color:#0B666A;
-    text-align: end;
-    font-size: 5vh;
-}
 
-.chat {
-    display: flex;
-    flex-direction:row-reverse;
 
-}
+
 .videos {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-video {width:40vw;height: 40vh;border-radius: 30px; box-shadow: 0 0 15px #35A29F; background-color: white;margin: 40px;}
+video {width:50vw;height:60vh;border-radius: 30px; border: solid;border-color: #0B666A; background-color: white;margin: 40px;object-fit: cover;}
 
 .d{
     display: flex;
@@ -101,16 +90,17 @@ video {width:40vw;height: 40vh;border-radius: 30px; box-shadow: 0 0 15px #35A29F
     flex-direction: column;
 }
 #you {
-    text-align: end;
-    direction: ltr;
-    color: #0B666A;
-    padding-right: 2rem;
+    align-self: flex-end; 
+    justify-self: flex-end;
+    display: flex;
 }
 
 #me {
-    text-align: start;
-    direction: ltr;
-    color: #35A29F;
+    align-self: flex-start; 
+    justify-self: flex-start;
+    text-align: center;
+    display: flex;
+    background-color: #35a29e8a;
 }
 
 .messages {
@@ -123,11 +113,16 @@ video {width:40vw;height: 40vh;border-radius: 30px; box-shadow: 0 0 15px #35A29F
     overflow: auto;
 }
 
-ul {
-    list-style: none;
-    font-weight: 600;
-
-
+p {
+  background-color: #0088ff2c;
+  border-radius: 8px;
+  width: fit-content;
+  padding: 0.5rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  font-weight: 600;
+  max-width: 60vw;
+  display: flex;
 }
 
 @media (orientation : portrait) {
@@ -145,6 +140,7 @@ ul {
 video:nth-child(1) {
     justify-self: flex-end;
     height: 10vh;
+    width: fit-content;
     border-radius: 10px;
     margin-bottom: 1rem;
     align-self: flex-end;
@@ -155,19 +151,21 @@ video:nth-child(1) {
 }
 video:nth-child(2) {
     height: 40vh;
+    width: 90vw;
 }
-video {width: fit-content;height: 20vh;margin: 0.1rem;border-radius: 15px;}
+video {margin: 0.1rem;border-radius: 15px;object-fit:cover;}
 .bottom {flex-direction: column-reverse;}
-.text {
-    width: 55vw;
-}
+
 .skip {
     margin-top: 0.5rem;
     width: 60vw;
     padding: 1px 0 2px;
+    margin-right: 0;
 }
 .messages {
     width: 90vw;
+    height: 30vh;
+    overflow-x:hidden;
     
 }
 }
@@ -176,318 +174,667 @@ video {width: fit-content;height: 20vh;margin: 0.1rem;border-radius: 15px;}
     background: transparent;
     width: 0.7rem;
     border-radius: 10px;
-
  }
+
  .messages::-webkit-scrollbar-thumb{
     background:linear-gradient(#35A29F,#0d7774);
     border-radius: 10px;
  }
  .skip:disabled {background: linear-gradient(33deg, #4d4d4d 0%, #8f8f8f 100%);transition-duration: 330ms;}
+
+
+@keyframes popIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+p.new-message {
+    animation: popIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+#ulll {
+padding: 1rem;
+display: flex;
+flex-direction: column;
+
+}
+#ulll img{
+  border-radius: inherit;
+}
+
+.chat2 img {
+  /* margin-right: 20px; */
+  width: 30px;
+}
+#sendpic{
+  width: 20px;
+  padding-left: 1rem;
+}
+.chat2 {
+  background-color: aliceblue;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  width: 80vw;
+  justify-content: space-between;
+}
+
+.chat2 .text2 {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  text-align: end;
+  width: 63vw;
+  font-size: 2vw;
+}
+
+.chat2 img {
+  /* margin-right: 20px; */
+  width: 40px;
+}
+#sendpic{
+  width: 25px;
+  padding-left: 1rem;
+}
+.imagess{
+display: flex;
+align-items: center;
+}
+.imagess img{
+  opacity: 0.6;
+  cursor: pointer;
+  transition-duration: 100ms;
+}
+.imagess img:hover{
+  opacity: 1;
+}
+
 </style>
 
-    <div class="header" id="header" >
-        <a href="/">
-        <img src="{% static 'beharf white.png' %}" alt="بحرف">
-    </a>
     </div>
     <div class="videos">
-        <video id="localVideo"  autoplay playsinline></video>
-        <video id="remoteVideo"  autoplay playsinline src="{% static 'loading.mp4' %}" loop></video>
+        <video id="localVideo" muted autoplay playsinline></video>
+        <video id="remoteVideo" autoplay playsinline loop></video>
     </div>
 
 
 <div class="d">
     <div class="down">
-     <div class="messages">
-        <ul id="ulll">
-
-        </ul>
-
+      <div class="messages">
+        <div id="ulll">
+            <p id="loading">درحال پیدا کردن کاربر ...</p>
+        </div>
      </div>
     <div class="bottom">
-    <button class="skip" id="skip" onclick="skip()" disabled>بعدی</button>
-    <div class="chat">
-        <input type="text" class="text" id="text">
-        <input type="submit" class="submit" value="ارسال" onclick="send_message()">
+    <button class="skip" id="skip" onclick="closeConnection()">بعدی</button>
+    <div class="chat2">
+      <div class="imagess">
+      <img src="{% static 'send.png' %}" class="sobmit">
+      <input type="file" id="image-input" style="display: none;" accept="image/*">
+      <img onclick="document.getElementById('image-input').click();" id="sendpic" src="{% static 'pic.png' %}">
+      </div>
+      <input type="text" class="text2" id="text">
     </div>
 </div>
 </div>
 </div>
-<script> 
-let sendChannel;
-let localConnection;
-let remoteConnection;
-let localStream;
-let is_girl = false;
-let is_boy = false;
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-if(isMobile) {
-    console.log('hi');
-    document.getElementById('header').style.display = 'none'
+{% if user.is_authenticated and user.is_staff %}
+<script>
+  function sendhello(){
+    conn.send('به {{ user.name }} {{user.age}} ساله از {{ user.city }} متصل شدید (صاحب بحرف) ');
+  }
+</script>
+{% else %}
+<script>
+  function sendhello(){
+    conn.send('به {{ user.name }} {{user.age}} ساله از {{ user.city }} متصل شدید باهم دوست باشید :)');
+  }
+</script>
+{% endif %}
 
-}
-// var skip = document.getElementById('skip')
-function skip(){
-    ulll.innerHTML = '';
-if (is_boy){
+<script>
+      let conn;  // Declare 'conn' in a broader scope
+      let call;
+    let peer;
+    var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
+    let skip = 0;
 
-localConnection.close();
-sendChannel.close();
-}
-else if (is_girl){
-
-remoteConnection.close();
-receiveChannel.close();
-}
-reconect()
-}
-
-function onConnect() {
-
-    var skipButton = document.getElementById('skip');
-
-    skipButton.removeAttribute('disabled');
-}
-
-function onDisconnect() {
-
-    var skipButton = document.getElementById('skip');
-
-    skipButton.setAttribute('disabled', '');
-}
-
-var socket = new WebSocket('wss://' + window.location.host);
-var ulll = document.querySelector("#ulll")
-function reconect() {
-    socket = new WebSocket('wss://' + window.location.host);
-    socket.onmessage = async function(event) {
-    var data = JSON.parse(event.data);
-
-    if (data.waiting_users) {
-        if (data.waiting_users[0] === '{{user.username}}') {
-            await boy();
-            is_boy = true;
-            alert('u0');
-        }
-
-        if (data.waiting_users[1] === '{{user.username}}') {
-            is_girl = true;
-            alert('u1');
-        }
-    }
-    let offer = await data.offer;
     
-    if (offer && is_girl) {
-        await girl(offer);
+    function closeConnection() {
+    // Send a message to the other user to indicate the end of the call
+    conn.send({ endCall: true });
+
+    // Delay the closing of the connection by 1 second
+    setTimeout(() => {
+        // Close the connection
+        conn.close();
+    }, 10); // 1000 milliseconds (1 second) delay
+}
+
+
+    const config = {
+      iceServers: [
+        { urls: 'stun:167.172.161.251:3478' },
+        { urls: 'turn:167.172.161.251:3478', username: 'gorb', credential: 'pass' }
+      ]
+    };
+function resetPeer() {
+
+  console.log('reseting nigga');
+  if (conn) {
+    conn.close();
+    conn = null;
+    console.log('fuckking conn');
+  }
+  if (peer) {
+    peer.disconnect();
+    peer.destroy();
+    peer = null;
+    console.log('fuckking peer');
+  }
+  if (call) {
+  call.close();
+  call = null;
+  console.log('fuckking call');
+}
+
+document.getElementById('remoteVideo').srcObject = null;
+document.getElementById('remoteVideo').src = "{% static 'loading1.mp4' %}";
+  document.getElementById('ulll').innerHTML = '<p id="loading">درحال پیدا کردن کاربر ...</p>'
+  // Re-initialize Peer object with a new ID
+  socket = new WebSocket(ws_scheme + window.location.host + '/testtvideo/');
+  peer = new Peer({config: config});
+  socket.onopen = () => {
+    console.log('سوکت باز کردوم یخیخیخیخخییخی');
+};
+ 
+  peer.on('open', (id) => {
+    console.log(`My new peer ID is: ${id}`);
+    if (socket.readyState == 1) {
+      socket.send(JSON.stringify({ peer: { username: '{{user.username}}', peer_id: id } }));
     }
-    let answer = await data.answer;
+  });
+  peer.on('call', call => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then(stream => {
+        call.answer(stream); // Answer the call with your stream.
+  
+        call.on('stream', remoteStream => {
+          const remoteVideo = document.getElementById('remoteVideo');
+        remoteVideo.srcObject = remoteStream;
 
-    if (answer && is_boy) {
-        await localConnection.setRemoteDescription(new RTCSessionDescription(answer));
-        console.log('bye bye bye');
-    }
-};
-
-}
-async function boy() {
-localConnection = new RTCPeerConnection();
-
-
-localConnection.onicecandidate = e => {
-if (localConnection.iceGatheringState === 'complete') {
-console.log("NEW ice candidate!!");
-console.log(JSON.stringify(localConnection.localDescription));
-socket.send(JSON.stringify({user: '{{ user.username }}', offer: localConnection.localDescription}));
-}
-};
-
-sendChannel = localConnection.createDataChannel("sendChannel");
-sendChannel.onmessage = e => {
-let li = document.createElement('li');
-li.id = 'you';
-li.textContent = e.data;
+        });
+      }).catch(err => {
+        console.error('Failed to get local stream', err);
+      });
+  });
 
 
-ulll.appendChild(li);
 
-}
+socket.onmessage = async function (event) {
+        var data = JSON.parse(event.data);
+        console.log(data);
+        if (data.users.length === 2) {
+          for (let i = 0; i < data.users.length; i++) {
+            const obj = data.users[i];
+            if (obj.username !== '{{user.username}}') {
+              console.log('maniga');
+              conn = peer.connect(obj.peer_id);
+              navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                .then(stream => {
+                  // Display your own video
+             
+            call = peer.call(obj.peer_id, stream);
+                  localVideo.srcObject = stream;
 
-sendChannel.onopen = e => {sendChannel.send('به {{ user.name }} {{user.age}} ساله از {{ user.city }} متصل شدید باهم دوست باشید :)');socket.send(JSON.stringify({ d: 'hola' }));socket.close();console.log('boy is connected');onConnect()}
-sendChannel.onclose = e => {ulll.innerHTML = '' ;console.log("closed!");document.getElementById('remoteVideo').src = "{% static 'loading.mp4' %}";reconect() ;console.log('boy is disconnected');onDisconnect()}
+                  // When you receive the peer's stream:
+                  call.on('stream', remoteStream => {
+                    // Display peer's video
+                    const remoteVideo = document.getElementById('remoteVideo');
+                    remoteVideo.srcObject = remoteStream;
 
-let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-document.getElementById('localVideo').srcObject = stream;
-
-localStream = stream;
-document.getElementById('localVideo').muted = true;
-localStream.getTracks().forEach(track => {
-localConnection.addTrack(track, localStream);
-});
-
-let offer = await localConnection.createOffer();
-await localConnection.setLocalDescription(offer);
-
-localConnection.ontrack = event => {
-console.log('ontrack event fired in boy function');
-if (event.streams[0]) {
-console.log('Stream is defined in ontrack event');
-document.getElementById('remoteVideo').srcObject = event.streams[0];
-document.getElementById('remoteVideo').loop = false
-} else {
-console.log('Stream is not defined in ontrack event');
-document.getElementById('remoteVideo').src = "{% static 'loading.mp4' %}";
-document.getElementById('remoteVideo').loop = true
-}
-};
-
-
-localConnection.onclose = event => {
-    console.log('Connection closed in boy function');
-    document.getElementById('remoteVideo').src = "{% static 'loading.mp4' %}";
-    document.getElementById('remoteVideo').loop = true;
-};
-
+                  });
+                }).catch(err => {
+                  // Handle the error
+                  console.error('Failed to get local stream', err);
+                });
+                          
+              // Close the socket connection
+              socket.close();
+              // Break out of the loop
+              break;
+            }
+          }
 }
 
+        conn.on('open', () => {
+            document.getElementById('loading').style.display = 'none'
+          sendhello()
+          console.log('opend');
+        });
 
-async function girl(offer) {
-remoteConnection = new RTCPeerConnection();
+        conn.on('close', () => {
+        console.log('Outgoing connection closed');
+        console.log('nigga closed');
+        resetPeer();
+      });
 
-remoteConnection.ontrack = event => {
-if (event.streams[0]) {
-document.getElementById('remoteVideo').srcObject = event.streams[0]; document.getElementById('remoteVideo').loop = false
-}
-else {document.getElementById('remoteVideo').src = "{% static 'loading.mp4' %}"; document.getElementById('remoteVideo').loop = true}
-};
+  
+    };
 
-await remoteConnection.setRemoteDescription(new RTCSessionDescription(offer));
-remoteConnection.ondatachannel= e => {
-
-const receiveChannel = e.channel;
-receiveChannel.onmessage =e =>  {
-    let li = document.createElement('li');
-li.id = 'you';
-li.textContent = e.data;
-
-
-ulll.appendChild(li);
-
-}
-receiveChannel.onopen = e =>  {remoteConnection.channel.send('به {{ user.name }} {{user.age}} ساله از {{ user.city }} متصل شدید باهم دوست باشید :)'); socket.close() ; console.log('girl is connected');onConnect()}
-
-receiveChannel.onclose =e => {ulll.innerHTML = '';console.log("closed!!!!!!"); document.getElementById('remoteVideo').src = "{% static 'loading.mp4' %}";reconect(); console.log('girl is disconnected');onDisconnect()}
-remoteConnection.channel = receiveChannel;
-
-}
-let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });//{ facingMode: { ideal: "user" } }
-document.getElementById('localVideo').srcObject = stream;
-document.getElementById('localVideo').muted = true;
-stream.getTracks().forEach(track => {
-remoteConnection.addTrack(track, stream);
-});
-
-let answer = await remoteConnection.createAnswer();
-await remoteConnection.setLocalDescription(answer);
-
-remoteConnection.onclose = event => {
-    console.log('Connection closed in girl function');
-    document.getElementById('remoteVideo').src = "{% static 'loading.mp4' %}";
-    document.getElementById('remoteVideo').loop = true;
-};
-
-socket.send(JSON.stringify({ user: '{{user.username}}', answer: remoteConnection.localDescription }));
-}
-
-function girl_message(message){
-
-var li = document.createElement("li");
-
-
-li.id = "me";
-
-
-li.textContent = message;
-
-var ul = document.querySelector("#ulll");
-remoteConnection.channel.send(message)
-document.getElementById('text').value = ''
-ul.appendChild(li);
-}
-function boy_message(message){
-var li = document.createElement("li");
-li.id = "me";
-li.textContent = message;
-
-var ul = document.querySelector("#ulll");
-sendChannel.send(message)
-document.getElementById('text').value = ''
-ul.appendChild(li);
-
-}
-
-let offerPromise = new Promise(resolve => {
-  socket.onmessage = function(event) {
-    var data = JSON.parse(event.data);
-    if (data.offer) {
-      resolve(data.offer);
-    }
-  };
-});
-socket.onopen= () => {console.log('یه سوکت باز شد');}
-socket.onmessage = async function(event) {
-    var data = JSON.parse(event.data);
-
-    if (data.waiting_users) {
-        if (data.waiting_users[0] === '{{user.username}}') {
-            await boy();
-            is_boy = true;
+    peer.on('connection', (incomingConn) => {
+      incomingConn.on('data', (data) => {
+        if(data.endCall){
+          conn.close();
         }
+        else{
 
-        if (data.waiting_users[1] === '{{user.username}}') {
-            is_girl = true;
-        }
-    }
-    let offer = await data.offer;
-    
-    if (offer && is_girl) {
-        await girl(offer);
-    }
-    let answer = await data.answer;
+    if (typeof data === 'object' && data.type === 'image') {
+      const img = document.createElement('img');
+      img.src = data.data;
+      img.style.maxWidth = '200px';  // Adjust as needed
+      img.style.maxHeight = '200px'; // Adjust as needed
+      img.style.borderRadius = 'inherit';
+      const li = document.createElement('p');
+      li.id = 'you'; // Use 'you' to indicate receiver
+      li.appendChild(img);
+      li.classList.add('new-message');
+      document.getElementById('ulll').appendChild(li);
+      } else {
+  console.log('Received:', data);
+  
+  // Decode the received emoji string
+  const decodedEmoji = decodeURIComponent(data);
 
-    if (answer && is_boy) {
-        await localConnection.setRemoteDescription(new RTCSessionDescription(answer));
-        console.log('bye bye bye');
-    }
-};
-
-
-
-socket.onclose = (event) => {
-console.log('WebSocket connection closed with code ' + event.code);
-};
-
-function send_message(){
-let message = document.getElementById('text').value
-console.log(message)
-if (is_boy){
-boy_message(message)
-
-}
-else if (is_girl){
-girl_message(message)
-message = '';
-}
-}
-
-
-const textInput = document.getElementById('text');
-    textInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        send_message()
+  let li = document.createElement('p');
+  li.id = 'you';
+  li.textContent = decodedEmoji;  // Use the decoded emoji string
+  li.classList.add("new-message");
+  ulll.appendChild(li);
       }
-    });
+      }
+  });
+      });
+
+
+document.getElementById('image-input').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(readerEvent) {
+      const imageDataUrl = readerEvent.target.result;
+      // Display the image immediately for the sender
+      const img = document.createElement('img');
+      img.src = imageDataUrl;
+      img.style.maxWidth = '200px';  // Adjust as needed
+      img.style.maxHeight = '200px'; // Adjust as needed
+      const li = document.createElement('p');
+      li.id = 'me'; // Use 'me' to indicate sender
+      li.appendChild(img);
+      li.classList.add('new-message');
+      document.getElementById('ulll').appendChild(li);
+
+      // Send the image data URL over PeerJS
+      if (conn) {
+        conn.send({
+          type: 'image',
+          data: imageDataUrl
+        });
+        console.log('Image sent');
+      } else {
+        console.log('Not connected to any peer.');
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+});
+const messageInput = document.querySelector('#text');
+messageInput.addEventListener('keydown', function(event) {
+  // Check if the pressed key is Enter (keycode 13)
+  if (event.keyCode === 13) {
+    // Prevent the default behavior of the Enter key (e.g., adding a new line)
+    event.preventDefault();
+
+    // Extract the message from the input field
+    const customMessage = messageInput.value.trim();
+
+    // Check if the message is not empty
+    if (customMessage !== '') {
+      if (conn) {
+        console.log(`Sent: ${customMessage}`);
+
+        // Convert emoji to its string representation
+        const messageWithEmojis = Array.from(customMessage).map(char => {
+          if (char.length > 1) {
+            // It's an emoji, convert to string
+            return encodeURIComponent(char);
+          }
+          return char;
+        }).join('');
+
+        // Create a new message element and append it to the chat UI
+        let li = document.createElement("p");
+        li.id = "me";
+        li.textContent = customMessage;
+        li.classList.add("new-message");
+        document.getElementById('ulll').appendChild(li);
+
+        // Send the message
+        conn.send(messageWithEmojis);
+
+        // Clear the input field
+        messageInput.value = '';
+      } else {
+        console.log('Not connected to any peer.');
+      }
+    } else {
+      console.log('Please enter a message.');
+    }
+  }
+});
+
+}
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      resetPeer()
+  });
 
 </script>
+
+<!-- 
+<script>
+    let conn; 
+    var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
+    var socket = new WebSocket(ws_scheme + window.location.host + '/testtvideo/');
+    let peer;
+    let f = false;
+    let stream;
+    let call;
+    const remoteVideo = document.querySelector('#remoteVideo');
+    const localVideo = document.querySelector('#localVideo');
+
+    function closeConnection() {
+    if (conn) {
+        conn.close();
+    }
+    }
+    
+    
+    const config = {
+      iceServers: [
+        { urls: 'stun:167.172.161.251:3478' },
+        { urls: 'turn:167.172.161.251:3478', username: 'gorb', credential: 'pass' }
+      ]
+    };
+  
+    // Wait for the DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', async (event) => {
+
+
+      // Initialize Peer object with configuration
+      peer = new Peer({config: config});
+        
+function resetPeer() {
+  if (conn) {
+    conn.close();
+    conn = null;
+  }
+  if (peer) {
+    peer.disconnect();
+    peer.destroy();
+    peer = null;
+  }
+  document.getElementById('ulll').innerHTML = '<p id="loading">درحال پیدا کردن کاربر ...</p>'
+  // Re-initialize Peer object with a new ID
+  socket = new WebSocket(ws_scheme + window.location.host + '/testtvideo/');
+  peer = new Peer({config: config});
+  socket.onopen = () => {
+    console.log('سوکت باز کردوم یخیخیخیخخییخی');
+};
+
+  peer.on('open', (id) => {
+    console.log(`My new peer ID is: ${id}`);
+    if (socket.readyState == 1) {
+      socket.send(JSON.stringify({ peer: { username: '{{user.username}}', peer_id: id } }));
+    }
+  });
+
+socket.onmessage = async function (event) {
+        var data = JSON.parse(event.data);
+        console.log(data);
+        if (data.users.length === 2) {
+          for (let i = 0; i < data.users.length; i++) {
+            const obj = data.users[i];
+            if (obj.username !== '{{user.username}}') {
+              console.log('maniga');
+              conn = peer.connect(obj.peer_id);
+              // Close the socket connection
+              socket.close();
+              // Break out of the loop
+              break;
+            }
+          }
+}
+
+        conn.on('data', (data) => {
+          console.log('Received:', data);
+        });
+        conn.on('close', () => {
+        console.log('Outgoing connection closed');
+        resetPeer();
+      });
+      peer.on('call', (call) => {
+        call.answer(stream); // Answer the call with the local stream
+        
+        call.on('stream', (remoteStream) => {
+          remoteVideo.srcObject = remoteStream;
+        });
+      });
+
+  
+        
+    };
+
+    peer.on('connection', (incomingConn) => {
+      incomingConn.on('data', (data) => {
+    if (typeof data === 'object' && data.type === 'image') {
+      const img = document.createElement('img');
+      img.src = data.data;
+      img.style.maxWidth = '200px';  // Adjust as needed
+      img.style.maxHeight = '200px'; // Adjust as needed
+      img.style.borderRadius = 'inherit';
+      const li = document.createElement('p');
+      li.id = 'you'; // Use 'you' to indicate receiver
+      li.appendChild(img);
+      li.classList.add('new-message');
+      document.getElementById('ulll').appendChild(li);
+      } else {
+  console.log('Received:', data);
+  
+  // Decode the received emoji string
+  const decodedEmoji = decodeURIComponent(data);
+
+  let li = document.createElement('p');
+  li.id = 'you';
+  li.textContent = decodedEmoji;  // Use the decoded emoji string
+  li.classList.add("new-message");
+  ulll.appendChild(li);
+      }
+});
+        call = peer.call(incomingConn.peer, stream);
+
+      call.on('stream', (remoteStream) => {
+        remoteVideo.srcObject = remoteStream;
+      });
+      });
+
+}
+
+
+
+peer.on('open', (id) => {
+        console.log(`My peer ID is: ${id}`);
+         
+          console.log('shit');
+      if(socket.readyState == 1){
+        socket.send(JSON.stringify({peer : {username : '{{user.username}}' , peer_id : id}}))
+        }
+      });
+
+
+      
+      try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });  // Assign 'stream' here
+      
+      localVideo.srcObject = stream;
+    } catch (error) {
+      console.error('Error accessing media devices:', error);
+    }
+
+  
+      // Listening for incoming connections
+      peer.on('connection', (incomingConn) => {
+        incomingConn.on('data', (data) => {
+    if (typeof data === 'object' && data.type === 'image') {
+      const img = document.createElement('img');
+      img.src = data.data;
+      img.style.maxWidth = '200px';  // Adjust as needed
+      img.style.maxHeight = '200px'; // Adjust as needed
+      img.style.borderRadius = 'inherit';
+      const li = document.createElement('p');
+      li.id = 'you'; // Use 'you' to indicate receiver
+      li.appendChild(img);
+      li.classList.add('new-message');
+      document.getElementById('ulll').appendChild(li);
+      } else {
+  console.log('Received:', data);
+  
+  // Decode the received emoji string
+  const decodedEmoji = decodeURIComponent(data);
+
+  let li = document.createElement('p');
+  li.id = 'you';
+  li.textContent = decodedEmoji;  // Use the decoded emoji string
+  li.classList.add("new-message");
+  ulll.appendChild(li);
+      }
+});
+        call = peer.call(incomingConn.peer, stream);
+
+      call.on('stream', (remoteStream) => {
+        remoteVideo.srcObject = remoteStream;
+      });
+      });
+    
+    socket.onmessage = async function (event) {
+        var data = JSON.parse(event.data);
+        console.log(data);
+
+      data.users.forEach(obj => {
+            if(obj.username !== '{{user.username}}'){
+              socket.close()
+                console.log('maniga');
+            conn = peer.connect(obj.peer_id);
+            conn.on('open', () => {
+              document.getElementById('loading').style.display = 'none'
+            conn.send('به {{ user.name }} {{user.age}} ساله از {{ user.city }} متصل شدید باهم دوست باشید :)');
+            
+          });
+            return;
+            }
+          });
+          conn.on('data', (data) => {
+          console.log('Received:', data);
+        });
+        conn.on('close', () => {
+        console.log('Outgoing connection closed');
+        resetPeer();
+      });
+      peer.on('call', (call) => {
+        call.answer(stream); // Answer the call with the local stream
+        
+        call.on('stream', (remoteStream) => {
+          remoteVideo.srcObject = remoteStream;
+        });
+      });
+
+
+    };
+  
+  
+  });
+
+
+  document.getElementById('image-input').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(readerEvent) {
+      const imageDataUrl = readerEvent.target.result;
+      // Display the image immediately for the sender
+      const img = document.createElement('img');
+      img.src = imageDataUrl;
+      img.style.maxWidth = '200px';  // Adjust as needed
+      img.style.maxHeight = '200px'; // Adjust as needed
+      const li = document.createElement('p');
+      li.id = 'me'; // Use 'me' to indicate sender
+      li.appendChild(img);
+      li.classList.add('new-message');
+      document.getElementById('ulll').appendChild(li);
+
+      // Send the image data URL over PeerJS
+      if (conn) {
+        conn.send({
+          type: 'image',
+          data: imageDataUrl
+        });
+        console.log('Image sent');
+      } else {
+        console.log('Not connected to any peer.');
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+const sendMessageBtn = document.querySelector('.sobmit');
+sendMessageBtn.addEventListener('click', () => {
+  const customMessage = document.querySelector('#text').value;
+  if (customMessage.trim() !== '') {
+    if (conn) {
+      console.log(`Sent: ${customMessage}`);
+      
+      // Convert emoji to its string representation
+      const messageWithEmojis = Array.from(customMessage).map(char => {
+        if (char.length > 1) {
+          // It's an emoji, convert to string
+          return encodeURIComponent(char);
+        }
+        return char;
+      }).join('');
+      
+      let li = document.createElement("p");
+      li.id = "me";
+      li.textContent = customMessage;
+      let ul = document.querySelector("#ulll");
+      ul.appendChild(li);
+      li.classList.add("new-message");
+      conn.send(messageWithEmojis); // Send the message with emojis as string
+      document.getElementById('text').value = '';
+    } else {
+      console.log('Not connected to any peer.');
+    }
+  } else {
+    console.log('Please enter a message.');
+  }
+});
+</script> -->
+
 </body>
 </html>

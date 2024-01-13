@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>لیست دوستان و درخواست‌ها</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            padding: 10px;
+            text-align: center;
+        }
+        a {
+            text-decoration: none;
+            color: #55acee;
+            margin-left: 10px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>Send Friend Request</h2>
+    <form method="post" action="{% url 'send_friend_request' %}">
+        {% csrf_token %}
+        <label for="username">Enter Username:</label>
+        <input type="text" id="username" name="username" required>
+        <button type="submit">Send Request</button>
+    </form>
+    <h1>Friend Requests</h1>
+    <ul>
+    {% for request in friend_requests %}
+        <li>{{ request.sender.username }} <a href="{% url 'accept_request' request.id %}">Accept</a> <a href="{% url 'reject_request' request.id %}">Reject</a></li>
+    {% empty %}
+        <li>No friend requests.</li>
+    {% endfor %}
+    </ul>
+    
+    <h1>Friends</h1>
+    <ul>
+    {% for friend in friends %}
+        <li>{{ friend.sender.username }} => {{ friend.receiver.username }}</li>
+    {% empty %}
+        <li>No friends yet.</li>
+    {% endfor %}
+    </ul>
+    
+</body>
+</html>

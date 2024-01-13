@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پروفایل</title>
+    {% load static %}
+
+    <link rel="icon" href="{% static 'change.png' %}" >
+</head>
+<body>
+    <!-- {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+<form method="post" action="">
+    {% csrf_token %}
+    <label for="id_username">Username:</label>
+    <input type="text" name="username" value="{{ user.username }}" required>
+    <label for="id_name">Name:</label>
+    <input type="text" name="name" value="{{ user.name }}" required>
+    <label for="id_age">Age:</label>
+    <input type="number" name="age" value="{{ user.age }}" required>
+    <label for="id_city">City:</label>
+    <input type="text" name="city" value="{{ user.city }}" required>
+    <button type="submit">Save Changes</button>
+</form> -->
+
+<style>
+    @font-face {
+    font-family: Dana;
+    src: url("{% static 'DanaFaNum-Regular.woff2' %}") format("woff2");
+  }
+    body{
+    margin: 0;
+    padding: 0;
+    background-color: #232323;
+}
+*{
+    font-family: Dana;
+}
+.fpage {
+
+height: 100vh;
+
+background: radial-gradient(at bottom left, rgb(0, 87, 46), #232323,#232323) bottom left,
+          radial-gradient(at top right, rgb(0, 87, 46), #232323 ,#232323) top right;
+background-size: 50% 50%;
+background-repeat: no-repeat;
+
+}
+.content {
+    width: 90vw;
+    height: 70vh;
+
+    padding: 10px;
+    position: relative;
+    border-radius: 70px;
+
+}
+.content::before{
+    background: linear-gradient(
+    -45deg,
+    transparent 5%,
+    rgb(151, 255, 137) 50%,
+    transparent 99%
+  );
+  border-radius: inherit;
+  content: "";
+  inset: 0px;
+
+  position: absolute;
+  transition: opacity 400ms;
+  z-index: 0;
+}
+
+
+.c2{
+    background-color: #333735;
+  border-radius: inherit;
+    inset: 2px;
+  padding: 1em;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+}
+.texts h1{
+    color: #00ff8a;
+    font-size:4vw;
+    padding: 1rem;
+    margin-top: -1rem;
+}
+.shit {
+    display: flex;
+    flex-direction: row-reverse;
+    color: white;
+    font-size: 3vw;
+    margin-top: -4rem;
+    margin-right: 1rem;
+}
+.shitimg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 1rem;
+}
+.shitimg img{
+    width:50px;
+
+}
+dialog{
+    background-color: #ffffff31;
+    outline: none;
+    border: 1px solid #fff;
+    border-radius: 50px;
+    color: #00ff8a;
+    text-align: center;
+    padding: 30px;
+
+}
+dialog h1{
+    font-size: 5vw;
+    text-shadow: 0 3px 5px #23232393;
+    margin-top: -2vh;
+}
+dialog::backdrop{
+
+    background-color: #00000096;
+}
+.pc form {
+    display: flex;
+    flex-direction: column;
+    outline: none;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    text-align: end;
+    font-size: 5vh;
+    padding-left: 6rem;
+    padding-right: 6rem;
+}
+.pc input{
+    outline: none;
+    text-align: end; 
+    border: 1px solid #00ff8a;
+    border-radius: 10px;
+    height: 9vh;
+    box-shadow: 0 3px 5px #23232393;
+    font-size: 6vh;
+}
+.pc button {
+    background-color: #00ff8a;
+    font-size: 3vw;
+    font-weight: 500;
+    outline: none;
+    border: none;
+    box-shadow: 0 3px 5px #23232393;
+    width: fit-content;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+    cursor: pointer;
+}
+@keyframes scaleAndFadeIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        dialog {
+            animation: scaleAndFadeIn 0.5s ease-in-out;
+        }
+@keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .shit img{
+            cursor:pointer;
+        }
+        .content {
+
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .shit {
+            /* ... your existing styles ... */
+            transition: color 0.5s ease-in-out;
+        }
+
+        .shit:hover {
+            color: #00ff8a;
+        }
+        .navbar img{
+        width: 15vw;padding: 1rem;
+    }
+    .mobile {display: none;} 
+@media (orientation : portrait) {
+    .pc {display: none;}
+    .mobile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+}
+
+</style>
+<div class="pc">
+<dialog id="name">
+    <h1>اسم جدیدت چیه ؟</h1>
+    <form method="post" action="{% url 'profile' %}">
+        {% csrf_token %}
+      <input type="text" name="name" value="{{ user.name }}" required>
+      <button type="submit">ثبت</button>
+    </form>
+  </dialog>
+  <dialog id="age">
+    <h1>چند سالته ؟</h1>
+    <form method="post" action="{% url 'profile' %}">
+        {% csrf_token %}
+      <input type="text" name="age" value="{{ user.age }}" required>
+      <button type="submit">ثبت</button>
+    </form>
+  </dialog>
+  <dialog id="city">
+    <h1>شهرت کجاست ؟</h1>
+    <form method="post" action="{% url 'profile' %}">
+        {% csrf_token %}
+      <input type="text" name="city" value="{{ user.city }}" required>
+      <button type="submit">ثبت</button>
+    </form>
+  </dialog>
+
+<div class="fpage" id="blur">
+    <div class="navbar">
+            <a href="/"><img src="{% static 'beharf white.png' %}" ></a>
+        </div>
+<div class="container">
+    <div class="content">
+        <div class="c2">
+            
+            <img src="{% static 'bimg.png' %}" style="padding: 1rem;" class="d">
+
+            <div class="texts">
+                <h1>خوش اومدی {{ user.name }}</h1>
+
+                <div class="shit" >
+                    <p>نام : {{user.name}}</p>
+                    <div class="shitimg">
+                    <img src="{% static 'change.png' %}" onclick="openshit('name')">
+                    </div>
+
+                </div>
+
+                <div class="shit" >
+                    <p>سن : {{user.age}}</p>
+                    <div class="shitimg">
+                    <img src="{% static 'change.png' %}" onclick="openshit('age')">
+                    </div>
+
+                </div>
+
+                <div class="shit" >
+                    <p>شهر : {{user.city}}</p>
+                    <div class="shitimg">
+                    <img src="{% static 'change.png' %}" onclick="openshit('city')">
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+
+<style>
+
+.top {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 150px #03bb6567;
+    align-items: center;
+    background-color: #15774a;
+    width: 100vw;
+    padding: 1rem;
+    border-bottom-left-radius: 100%;
+    border-bottom-right-radius: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-sizing: border-box; /* Include padding and border in the total width */
+    z-index: 2; /* Set a higher z-index than .bottom */
+}
+.top img {
+    width: 30vw;
+}
+
+.bottom {
+    border-top-left-radius: 35px;
+    border-top-right-radius: 35px;
+    background-color: #00000065;
+    width: 100vw;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    box-shadow: 0 0 70px #03bb6563;
+}
+
+.m {
+    padding: 0.5rem;
+    padding-right: 1rem;
+    padding-left: 1rem; /* افزودن پدینگ چپ برای تعادل فاصله */
+    margin: 0; /* حذف مارجین پیش‌فرض */
+    color: white;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    font-size: 5vh;
+    font-weight: 500;
+    margin-bottom: -3rem; /* کاهش مقدار مارجین بین عناصر */
+}
+
+.m:last-child {
+    margin-bottom: 0; /* حذف مارجین آخرین عنصر .m */
+}
+
+.mimg {
+    margin-right: 0.5rem; /* کاهش مارجین بین .mimg و متن .m */
+}
+
+.mimg img {
+    width: 3.5rem;
+}
+
+#fo {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+    align-items: center;
+    /* padding: 2rem; */
+}
+#fo .inpot{
+    outline: none;
+    border:3px solid #003a1f;
+    border-radius: 10px;
+    text-align: end;
+    font-size: 4vh;
+    width: 80vw;
+    height: 8vh;
+}
+#fo .sobmit {
+    background-color: #000;
+    color: #00ff8a;
+    width: fit-content;
+    font-size: 3vh;
+    border-radius: 10px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border: 4px solid #00ff8a;
+    margin-top: 2rem;
+}
+#top.expanded {
+        height: 40vh;
+        border-bottom-left-radius: 20%;
+        border-bottom-right-radius: 20%;
+        transition: height 1s ease, border-radius 0.1s ease;
+    }
+
+</style>
+
+<div class="mobile">
+    <div class="top" id="top">
+        <a href="/"><img src="{% static 'beharf white.png' %}" ></a>
+
+
+            <form method="post" action="{% url 'profile' %}" id="fo">
+                {% csrf_token %}
+
+            </form>
+
+    </div>
+    <div class="bottom">
+        <div class="m" >
+            <p>نام : {{user.name}}</p>
+            <div class="mimg">
+            <img src="{% static 'change.png' %}" onclick="createfo('name')">
+            </div>
+
+        </div>
+
+        <div class="m" >
+            <p>سن : {{user.age}}</p>
+            <div class="mimg">
+            <img src="{% static 'change.png' %}" onclick="createfo('age')">
+            </div>
+
+        </div>
+
+        <div class="m" >
+            <p>شهر : {{user.city}}</p>
+            <div class="mimg">
+            <img src="{% static 'change.png' %}" onclick="createfo('city')">
+            </div>
+
+    </div>
+</div>
+
+<script>
+
+function createfo(what) {
+        let form = document.getElementById('fo');
+        let top = document.getElementById('top');
+
+        // Toggle class for expansion and contraction
+        top.classList.toggle('expanded');
+
+        // Remove existing input fields
+        form.querySelectorAll('.dynamic-input').forEach(el => el.remove());
+
+        // Create a new input field
+        let i = document.createElement('input');
+        i.type = 'text';
+        i.name = what;
+        i.placeholder = `${what} جدیدت ؟`;
+        i.className = `i${what} dynamic-input inpot`;
+        form.appendChild(i);
+
+        // Create a submit button
+        let s = document.createElement('input');
+        s.type = 'submit';
+        s.value = 'ثبـــــــــــــت';
+        s.className = `s${what} dynamic-input sobmit`;
+        form.appendChild(s);
+    }
+    function openshit(shit){
+        document.getElementById(shit).showModal();
+        document.getElementById('blur').style.filter = 'blur(55px)'
+    }
+</script>
+</body>
+</html>
