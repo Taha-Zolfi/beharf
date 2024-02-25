@@ -4,16 +4,16 @@
 <head>
     <title>متنی بحرف !</title>
 
-    <script src="{% static 'peerjs.min.js' %}"></script>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8"> 
-    <link rel="icon" href="{% static 'dewdew.png' %}" >
+    <link rel="icon" href="https://github.com/Taha-Zolfi/beharf/blob/main/static/dewdew.png" >
 </head>
 <body>
 <style>
 @font-face {
     font-family: Dana;
-    src: url("{% static 'DanaFaNum-Regular.woff2' %}") format("woff2");
+    src: url("https://raw.githubusercontent.com/Taha-Zolfi/beharf/main/static/DanaFaNum-Regular.woff2") format("woff2");
   }
 
 .header img {
@@ -231,11 +231,6 @@ align-items: center;
 
 </style>
 
-    <div class="header" id="header">
-        <a href="/">
-        <img src="{% static 'beharf white.png' %}" alt="بحرف">
-    </a>
-    </div>
 
 
     <div class="down">
@@ -250,9 +245,9 @@ align-items: center;
 
     <div class="chat2">
       <div class="imagess">
-      <img src="{% static 'send.png' %}" class="sobmit">
+      <img src="https://raw.githubusercontent.com/Taha-Zolfi/beharf/main/static/send.png" class="sobmit">
       <input type="file" id="image-input" style="display: none;" accept="image/*">
-      <img onclick="document.getElementById('image-input').click();" id="sendpic" src="{% static 'pic.png' %}">
+      <img onclick="document.getElementById('image-input').click();" id="sendpic" src="https://raw.githubusercontent.com/Taha-Zolfi/beharf/main/static/pic.png}">
       </div>
       <input type="text" class="text2" id="text">
     </div>
@@ -290,8 +285,8 @@ align-items: center;
 
     const config = {
       iceServers: [
-        { urls: 'stun:167.172.161.251:3478' },
-        { urls: 'turn:167.172.161.251:3478', username: 'gorb', credential: 'pass' }
+        { urls: 'stun:40.119.160.88:3478' },
+        { urls: 'turn:40.119.160.88:3478', username: 'gorb', credential: 'pass' }
       ]
     };
 function resetPeer() {
